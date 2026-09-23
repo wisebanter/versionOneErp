@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>stackAlert.js jQuery Plugin Playground</title>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<script src="https://cdn.jsdelivr.net/gh/FVLogika/stackAlert/stackAlert.min.js"></script>
+
+	<style>
+		body {
+			font-family: 'Inter', system-ui, sans-serif;
+			padding: 30px;
+			background: #fdfdfd;
+		}
+		div.content {
+			margin: auto;
+			max-width: 960px;
+		}
+		h1 {
+			font-size: 1.8rem;
+			margin-bottom: 20px;
+		}
+		.form-section {
+			margin-bottom: 20px;
+		}
+		.label-inline {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		#code-preview, #code-preview-en {
+			background: #f8f9fa;
+			border: 1px solid #ccc;
+			font-family: monospace;
+			padding: 10px;
+			white-space: pre-wrap;
+			min-height: 50px;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="content">
+		<h1>stackAlert.js jQuery Plugin Playground</h1>
+		<style>
+.download{ padding: 1.25rem; border:0; border-radius:3px; background-color:#4F46E5; color:#fff;cursor:pointer; text-decoration:none;}.download:hover{color: #fff}#carbonads{display:block;overflow:hidden;max-width:728px;position:relative;font-size:22px;box-sizing:content-box}#carbonads>span{display:block}#carbonads a{color:#4F46E5;text-decoration:none}#carbonads a:hover{color:#4F46E5}.carbon-wrap{display:flex;align-items:center}.carbon-img{display:block;margin:0;line-height:1}.carbon-img img{display:block;height:90px;width:auto}.carbon-text{display:block;padding:0 1em;line-height:1.35;text-align:left}.carbon-poweredby{display:block;position:absolute;bottom:0;right:0;padding:6px 10px;text-align:center;text-transform:uppercase;letter-spacing:.5px;font-weight:600;font-size:8px;border-top-left-radius:4px;line-height:1;color:#aaa!important}@media only screen and (min-width:320px) and (max-width:759px){.carbon-text{font-size:14px}}
+</style>
+<div><div id="carbon-block"></div><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2783044520727903"
+     crossorigin="anonymous"></script>
+<!-- jQuery_Replace_Demo -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2783044520727903"
+     data-ad-slot="7325992188"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+<p style="margin:2rem auto"><a class="download" href="https://www.jqueryscript.net/other/bootstrap-stack-toast-alert.html">Download This Plugin</a> <a class="download" href="https://www.jqueryscript.net/">Back To jQueryScript</a></p>
+		<p class="lead">A tiny jQuery plugin for creating stacked toast notifications with Bootstrap 5. Configure position, timeout, and icons.</p>
+
+		<div class="form-section">
+			<label for="msg" class="form-label">💬 Message:</label>
+			<input id="msg" class="form-control" placeholder="Alert Message Here..." />
+		</div>
+
+		<div class="form-section">
+			<label for="type" class="form-label">🎨 Type:</label>
+			<select id="type" class="form-select">
+				<option value="info">Info</option>
+				<option value="success">Success</option>
+				<option value="warning">Warning</option>
+				<option value="danger">Danger</option>
+				<option value="primary">Primary</option>
+				<option value="secondary">Secondary</option>
+				<option value="light">Light</option>
+				<option value="dark">Dark</option>
+			</select>
+		</div>
+
+		<div class="form-section">
+			<div class="label-inline">
+				<label for="timeout" class="form-label">⏱️ Timeout (ms):</label>
+				<span id="timeout-label">5000</span>
+			</div>
+			<input type="range" min="0" max="10000" step="500" id="timeout" class="form-range" value="5000" />
+			<div class="form-check mt-2">
+				<input type="checkbox" class="form-check-input" id="manualOnly">
+				<label class="form-check-label" for="manualOnly">Sticky Alert (timeout 0)</label>
+			</div>
+		</div>
+
+		<div class="form-section">
+			<label for="pos" class="form-label">📍 Position:</label>
+			<select id="pos" class="form-select">
+				<option value="top-right">Top-right</option>
+				<option value="top-left">Top-left</option>
+				<option value="bottom-right">Bottom-right</option>
+				<option value="bottom-left">Bottom-left</option>
+				<option value="top-center">Top-center</option>
+				<option value="bottom-center">Bottom-center</option>
+			</select>
+		</div>
+
+		<div class="form-section d-grid gap-2">
+			<button class="btn btn-primary" onclick="showAlert()">🔔 Show Alert</button>
+			<button class="btn btn-secondary" onclick="copyCode()">📋 Copy Code</button>
+			<button class="btn btn-danger" onclick="$.fn.stackAlert.closeAll()">🧹 Close All</button>
+		</div>
+
+		<div class="form-section">
+			<label class="form-label">🧾 Code Preview:</label>
+			<div id="code-preview">(No Code Generated)</div>
+		</div>
+
+	</div>
+	<script>
+		const msg		= document.getElementById('msg');
+		const type		= document.getElementById('type');
+		const timeout		= document.getElementById('timeout');
+		const timeout_label	= document.getElementById('timeout-label');
+		const manualOnly	= document.getElementById('manualOnly');
+		const pos		= document.getElementById('pos');
+
+
+		timeout.addEventListener('input', () => {
+			timeout_label.textContent = timeout.value;
+		});
+		timeout_en.addEventListener('input', () => {
+			timeout_label_en.textContent = timeout_en.value;
+		});
+
+		function showAlert() {
+			const message	= msg.value || '✅ No message entered';
+			const tmo	= manualOnly.checked ? 0 : parseInt(timeout.value);
+			const position	= pos.value;
+			const typeVal	= type.value;
+
+			$.fn.stackAlert(message, typeVal, tmo, position);
+
+			const codeLine = `$.fn.stackAlert('${message}', '${typeVal}', ${tmo}, '${position}');`;
+			document.getElementById('code-preview').textContent = codeLine;
+		}
+
+
+		function copyCode() {
+			const code = document.getElementById('code-preview').textContent;
+			navigator.clipboard.writeText(code);
+			$.fn.stackAlert('📋 Codice copiato negli appunti.', 'info', 2000, 'top-right');
+		}
+
+
+	</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-1VDDWMRSTH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-1VDDWMRSTH');
+</script><script>
+try {
+  fetch(new Request("https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js", { method: 'HEAD', mode: 'no-cors' })).then(function(response) {
+    return true;
+  }).catch(function(e) {
+    var carbonScript = document.createElement("script");
+    carbonScript.src = "//cdn.carbonads.com/carbon.js?serve=CK7DKKQU&placement=wwwjqueryscriptnet";
+    carbonScript.id = "_carbonads_js";
+    document.getElementById("carbon-block").appendChild(carbonScript);
+  });
+} catch (error) {
+  console.log(error);
+}
+</script>
+</body>
+</html>
