@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en" data-color-mode="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{app_name}} API Reference</title>
+
+  <link rel="stylesheet"
+    href="{{ url_for('static', filename='vendor/google-fonts/fonts.css?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/font-awesome/css/all.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='api/api.css') }}" />
+</head>
+
+<body>
+  <div class="app" id="appRoot">
+
+    <!-- ============================================================
+         TOP HEADER
+         ============================================================ -->
+    <header class="top-header" id="topHeader">
+      <div class="top-header-inner">
+        <button class="icon-btn hamburger" id="menuToggle" aria-label="Toggle navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <a href="#" class="brand">
+          <img src="https://files.readme.io/70ea62c-small-manatal_logo_square_100x100.png" alt="lll" />
+          <span>LLL</span>
+        </a>
+        <nav class="top-nav">
+          <a href="#"><i class="fa-solid fa-house"></i>Home</a>
+          <a href="#"><i class="fa-solid fa-book"></i>Guides</a>
+          <a href="#" class="active"><i class="fa-solid fa-code"></i>API Reference</a>
+          <a href="#"><i class="fa-solid fa-bullhorn"></i>Announcements</a>
+        </nav>
+        <div class="header-right">
+          <a href="#"
+            style="font-size:13px;color:var(--text-muted);padding:6px 10px;border-radius:var(--radius);display:inline-flex;align-items:center;gap:6px">
+            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px"></i>Visit Website
+          </a>
+          <button class="search-toggle" aria-label="Search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Search</span>
+            <span class="kbd">CTRL-K</span>
+          </button>
+          <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+            <i class="fa-solid fa-moon" id="themeIcon"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============================================================
+         SUB HEADER
+         ============================================================ -->
+    <div class="sub-header">
+      <div class="sub-header-inner">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar" title="Collapse sidebar">
+          <i class="fa-solid fa-angles-left"></i>
+        </button>
+        <span class="version-pill"><i class="fa-solid fa-code-branch"></i>new OpenAPI</span>
+        <button class="sub-nav-link">
+          <i class="fa-solid fa-book-open"></i>
+          <span>API Reference</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </button>
+        <button class="mobile-title">
+          <span class="endpoint-name">/candidates/</span>
+          <i class="fa-solid fa-chevron-down"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="main-wrap">
+
+      <!-- ============================================================
+           SIDEBAR
+           ============================================================ -->
+      <aside class="sidebar" id="sidebar">
+
+        <!-- Filter -->
+        <div class="sidebar-filter">
+          <div class="filter-wrap" id="filterWrap">
+            <i class="fa-solid fa-magnifying-glass filter-icon"></i>
+            <input type="search" class="filter-input" id="filterInput" placeholder="Filter endpoints…"
+              autocomplete="off" spellcheck="false" />
+            <span class="kbd filter-kbd">⌘/</span>
+            <button class="filter-clear" id="filterClear" aria-label="Clear filter">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div class="filter-results">
+            <span><span class="count" id="filterCount">0</span> matches</span>
+            <button class="clear-all" id="filterClearAll">
+              <i class="fa-solid fa-xmark" style="font-size:9px"></i> Clear
+            </button>
+          </div>
+        </div>
+        <div class="filter-empty">
+          <i class="fa-solid fa-magnifying-glass-minus"></i>
+          No matching pages found
+        </div>
+
+        <!-- Overview -->
+        <div class="sidebar-section">
+          <h2 class="sidebar-heading"><i class="fa-solid fa-circle-info"></i>Overview</h2>
+          <ul class="sidebar-list">
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="#">
+                <i class="fa-solid fa-rocket"></i>
+                <span class="sidebar-link-text">Welcome to Manatal's API documentation</span>
+              </a>
+            </li>
+            <li class="sidebar-item" data-parent>
+              <a class="sidebar-link sidebar-link-parent" href="#">
+                <i class="fa-solid fa-circle-info"></i>
+                <span class="sidebar-link-text">General information</span>
+                <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+              </a>
+              <ul class="subpages">
+                <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-key"></i><span
+                      class="sidebar-link-text">Authorization</span></a></li>
+                <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-gauge"></i><span
+                      class="sidebar-link-text">Rate limiting</span></a></li>
+                <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-webhook"></i><span
+                      class="sidebar-link-text">Webhooks</span></a></li>
+                <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list-ol"></i><span
+                      class="sidebar-link-text">Pagination</span></a></li>
+                <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-link"></i><span
+                      class="sidebar-link-text">Link validity</span></a></li>
+                <li class="subpage"><a class="sidebar-link" href="#"><i
+                      class="fa-solid fa-triangle-exclamation"></i><span class="sidebar-link-text">Error
+                      handling</span></a></li>
+                <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-file-code"></i><span
+                      class="sidebar-link-text">Formats</span></a></li>
+                <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-pen-to-square"></i><span
+                      class="sidebar-link-text">Custom fields</span></a></li>
+                <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-upload"></i><span
+                      class="sidebar-link-text">Uploading a file</span></a></li>
+                <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-flask"></i><span
+                      class="sidebar-link-text">Testing with Postman</span></a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Endpoints -->
+        <div class="sidebar-section">
+          <h2 class="sidebar-heading"><i class="fa-solid fa-terminal"></i>Manatal Open API</h2>
+          <ul class="sidebar-list">
+            {% for endpoint in endpoints %}
+            <li class="sidebar-item" data-parent>
+              <a class="sidebar-link sidebar-link-parent" href="#">
+                <i class="fa-solid fa-folder"></i>
+                <span class="sidebar-link-text">{{ endpoint.basePath }}</span>
+                <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+              </a>
+              <ul class="subpages">
+                {% for route in endpoint.route_list %}
+                <li class="subpage">
+                  <a class="sidebar-link sidebar-link-child" href="#"
+                    data-endpoint="{{ route.routePath }}"
+                    data-method-link="{{ route.method_class }}"
+                     data-method-link="{{ route.method_class }}"
+    {% if route.requireToken %}data-require-token="true"{% else %}data-require-token="false"{% endif %}
+                    data-description="{{ route.description }}"
+                    data-parameters="{{ route.parameters }}">
+                    <i class="fa-solid {{ route.icon }}"></i>
+                    <span class="sidebar-link-text">{{ route.routePath }}</span>
+                    <span class="sidebar-method sidebar-link-child {{ route.method_class }}">{{ route.method_display }}</span>
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="sidebar-footer">
+          <i class="fa-solid fa-bolt"></i>
+          Powered by <a href="#">ReadMe</a>
+        </div>
+      </aside>
+
+      <!-- ============================================================
+           CONTENT
+           ============================================================ -->
+      <article class="content">
+        <div class="copy-page-row">
+          <button class="copy-page-btn" id="copyPageBtn"><i class="fa-regular fa-copy"></i>Copy Page</button>
+        </div>
+
+        <h1 class="endpoint-title endpoint-name">/candidates/</h1>
+        <div class="endpoint-bar">
+          <span class="method get"><i class="fa-solid fa-download"></i>get</span>
+          <span class="endpoint-url" id="endpointUrlText">http://127.0.0.1/versionOneErp/v1/</span>
+        </div>
+        <p class="endpoint-desc">Retrieve all candidates ordered alphabetically.</p>
+
+        <!-- Recent Requests -->
+        <div class="recent-box">
+          <div class="recent-header">
+            <h4><i class="fa-solid fa-clock-rotate-left"></i>Recent Requests</h4>
+            <span class="recent-lock"><i class="fa-solid fa-lock"></i>Log in to see full request history</span>
+          </div>
+          <table class="recent-table">
+            <thead>
+              <tr>
+                <th style="width:150px">Time</th>
+                <th style="width:100px">Status</th>
+                <th>Method</th>
+                <th style="width:40px"></th>
+              </tr>
+            </thead>
+            <tbody id="recentTableBody"></tbody>
+          </table>
+          <div class="recent-graph">
+            <div class="sparkline">
+              <span style="height:20%"></span><span style="height:40%"></span>
+              <span style="height:60%"></span><span style="height:30%"></span>
+              <span style="height:80%"></span><span style="height:50%"></span>
+              <span style="height:90%"></span><span style="height:70%"></span>
+            </div>
+            <span><i class="fa-solid fa-chart-line"></i> <span id="requestCount">1</span> Request<span
+                id="requestPlural">s</span> This Month</span>
+          </div>
+        </div>
+
+        <!-- Query Params heading -->
+        <h3 class="section-heading" id="query-params">
+          <i class="fa-solid fa-sliders"></i>
+          <span>Query Params</span>
+          <a href="#query-params"><i class="fa-solid fa-link"></i></a>
+        </h3>
+
+        <!-- Dynamic params form (populated by renderParamsForm) -->
+        <form class="params" id="queryParamsForm" novalidate>
+          <div class="params-empty">
+            <i class="fa-solid fa-sliders"></i>
+            Select an endpoint from the sidebar to load its parameters
+          </div>
+        </form>
+      </article>
+
+      <!-- ============================================================
+           PLAYGROUND
+           ============================================================ -->
+      <aside class="playground">
+
+        <!-- Method -->
+        <div class="pg-section">
+          <h4 class="pg-heading"><i class="fa-solid fa-tag"></i>Method</h4>
+          <div class="method-picker" id="methodPicker">
+            <button class="method-pick active" data-method="get">GET</button>
+            <button class="method-pick" data-method="post">POST</button>
+            <button class="method-pick" data-method="put">PUT</button>
+            <button class="method-pick" data-method="patch">PATCH</button>
+            <button class="method-pick" data-method="del">DELETE</button>
+          </div>
+        </div>
+
+        <!-- Content-Type — visible only for methods that carry a body -->
+        <div class="pg-section" id="contentTypeSection" style="display:none">
+          <h4 class="pg-heading"><i class="fa-solid fa-file-code"></i>Content-Type</h4>
+          <div class="ct-picker">
+            <select id="contentTypePicker" class="ct-select" aria-label="Content-Type">
+              <option value="application/x-www-form-urlencoded" selected>application/x-www-form-urlencoded</option>
+              <option value="application/json">application/json</option>
+              <option value="multipart/form-data">multipart/form-data</option>
+              <option value="text/plain">text/plain</option>
+              <option value="application/xml">application/xml</option>
+            </select>
+            <i class="fa-solid fa-chevron-down ct-caret"></i>
+          </div>
+        </div>
+
+        <!-- Body (JSON / urlencoded / xml / text — depending on CT) -->
+        <div class="pg-section" id="bodySection" style="display:none">
+          <h4 class="pg-heading"><i class="fa-solid fa-file-code"></i>Body</h4>
+          <textarea disabled class="body-input" id="bodyInput" spellcheck="false" placeholder=''></textarea>
+          <div class="body-error" id="bodyError"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+        </div>
+
+        <!-- Language -->
+        <div class="pg-section">
+          <h4 class="pg-heading"><i class="fa-solid fa-language"></i>Language</h4>
+          <div class="lang-picker" id="langPicker">
+            <button class="lang-btn" data-lang="shell"><i class="fa-solid fa-terminal"></i>Shell</button>
+            <button class="lang-btn" data-lang="node"><i class="fa-brands fa-node-js"></i>Node</button>
+            <button class="lang-btn" data-lang="ruby"><i class="fa-solid fa-gem"></i>Ruby</button>
+            <button class="lang-btn" data-lang="php"><i class="fa-brands fa-php"></i>PHP</button>
+            <button class="lang-btn active" data-lang="python"><i class="fa-brands fa-python"></i>Python</button>
+          </div>
+        </div>
+
+        <!-- Credentials -->
+        <div class="pg-section">
+          <div class="cred-header">
+            <span class="pg-heading" style="margin:0"><i class="fa-solid fa-key"></i>Credentials</span>
+            <span class="cred-tags">
+              <span class="cred-tag" id="credTagRequired"><i class="fa-solid fa-heading"></i>Header</span>
+              <span class="cred-tag cred-tag-optional" id="credTagOptional" style="display:none">
+                <i class="fa-solid fa-circle-minus"></i>Not required
+              </span>
+            </span>
+          </div>
+
+          <div class="cred-input">
+            <!-- Authorization scheme picker -->
+            <div class="cred-scheme-wrap">
+              <select id="authSchemePicker" class="cred-scheme" aria-label="Authorization scheme">
+                <option value="Token">Token</option>
+                <option value="Bearer">Bearer</option>
+              </select>
+              <i class="fa-solid fa-chevron-down cred-scheme-caret"></i>
+            </div>
+
+            <input type="password" value="" placeholder="Enter token" id="authInput" />
+
+            <button class="icon-btn" id="authToggle" aria-label="Show/hide token"
+              style="border:1px solid var(--border);border-radius:6px;width:36px;height:36px">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <div class="cred-error" id="credError"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+        </div>
+
+        <!-- Request snippet -->
+        <div class="pg-section">
+          <h4 class="pg-heading"><i class="fa-solid fa-paper-plane"></i>Request</h4>
+          <div class="code-block">
+            <div class="code-top">
+              <span id="codeHead">python -m pip install requests</span>
+              <button class="code-copy" aria-label="Copy"><i class="fa-regular fa-copy"></i></button>
+            </div>
+            <pre class="code-body" id="codeBody"></pre>
+          </div>
+          <button class="try-btn" id="tryItBtn">
+            <i class="fa-solid fa-play"></i>Try It!
+          </button>
+        </div>
+
+        <!-- Response -->
+        <div class="pg-section">
+          <div class="response-panel">
+            <h4><i class="fa-solid fa-reply"></i>Response</h4>
+            <div class="response-empty" id="responseEmpty">
+              Click <code>Try It!</code> to start a request and see the response here!
+            </div>
+            <div class="hidden" id="responseResult">
+              <div class="response-result-box">
+                <div class="response-meta">
+                  <span id="respStatus"><i class="fa-solid fa-circle"></i>---</span>
+                  <span id="respTime"><i class="fa-solid fa-clock"></i>--- ms</span>
+                  <span id="respSize"><i class="fa-solid fa-database"></i>--- B</span>
+                </div>
+              </div>
+              <div class="code-block">
+                <div class="code-top">
+                  <span id="respHead">application/json</span>
+                  <button class="code-copy" aria-label="Copy"><i class="fa-regular fa-copy"></i></button>
+                </div>
+                <pre class="code-body" id="respBody"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+  </div>
+
+  <div class="toast-stack" id="toastStack"></div>
+
+  <!-- -------------------------------------------------------------------
+       IMPORTANT: adjust these paths to your project. The `Api` class must
+       be loaded BEFORE api.js runs.
+       ------------------------------------------------------------------- -->
+  <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+  <script src="{{ url_for('static', filename='api/api.js') }}"></script>
+
+</body>
+
+</html>

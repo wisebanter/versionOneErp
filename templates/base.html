@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{% block page_title %}Default Title{% endblock %}</title>
+
+    <!--begin::Accessibility Meta Tags-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
+    <!--end::Accessibility Meta Tags-->
+
+    <!--begin::Primary Meta Tags-->
+    <meta name="title" content="{% block page_title_meta %}Default Title{% endblock %}" />
+    <meta name="author" content="" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <!--end::Primary Meta Tags-->
+
+    <!--begin::Accessibility Features-->
+    <meta name="supported-color-schemes" content="light dark" />
+
+    <link rel="preload" href="{{ url_for('static', filename='css/adminlte.css') }}" as="style" />
+    <!--end::Accessibility Features-->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/source-sans-pro/index.css') }}" media="print" onload="this.media = 'all'">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-icons/font/bootstrap-icons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/overlayscrollbars/styles/overlayscrollbars.min.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/font-awesome/css/all.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/jquery-toast/css/jquery.toast.min.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/adminlte.css') }}">
+
+    {% block styles %}{% endblock %}
+    <!--end::Required Plugin(AdminLTE)-->
+</head>
+<!--end::Head-->
+
+<body class="{% block bodyclass %}{% endblock %}">
+
+    {% block bodycontent %}{% endblock %}
+
+    <!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <script src="{{ url_for('static', filename='vendor/jquery/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/overlayscrollbars/browser/overlayscrollbars.browser.es6.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/popperjs/umd/popper.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='vendor/bootstrap5/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap5/js/bootstrap.bundle.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='vendor/jquery-toast/js/jquery.toast.min.js') }}"></script>
+    <!-- stackAlert Plugin -->
+    <script src="{{ url_for('static', filename='vendor/bootstrap-stack-toast-alert/stackAlert.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/adminlte.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+
+    <script>
+      const baseFile = "index.php";
+      const api = new Api({ apiVersion: "v1", basefile: baseFile });
+      const local = new Api({ apiVersion: "", basefile: baseFile });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

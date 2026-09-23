@@ -1,0 +1,99 @@
+<!-- # =========================================================
+# 1. SECURITY & BASIC PROTECTIONS
+# =========================================================
+
+# Disable directory listing (prevents people from seeing your file structure)
+Options -Indexes -MultiViews
+
+# Hide server signature (prevents revealing your Apache/PHP version)
+ServerSignature Off
+
+# Protect sensitive files
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "\.(sql|log|ini|conf|env|lock|md)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Block direct access to your core application and SQL folders
+# This prevents users from typing yourdomain.com/app/cores/Database.php
+RewriteRule ^app/ - [F,L]
+RewriteRule ^sql/ - [F,L]
+
+# Note: If you don't want users accessing raw template files directly,
+# uncomment the line below (Make sure your assets/ folder is outside templates/ or handle it carefully)
+# RewriteRule ^templates/ - [F,L]
+
+
+# =========================================================
+# 2. CORE ROUTING (Front Controller Pattern)
+# =========================================================
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Set your base path. If the project is in the root of a domain, use "/".
+    # If it's in a subfolder, use "/versionOneErp/".
+    RewriteBase /versionOneErp/
+
+    # Redirect trailing slashes if not a folder
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.+)/$ /$1 [L,R=301]
+
+    # If the requested file or directory exists, serve it directly
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Otherwise, route everything to index.php
+    # The Router.php will parse the URL from $_SERVER['REQUEST_URI']
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+
+# =========================================================
+# 3. SPEED & PERFORMANCE OPTIMIZATIONS
+# =========================================================
+
+# --- GZIP Compression ---
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+    AddOutputFilterByType DEFLATE application/javascript application/x-javascript application/json application/xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# --- Browser Caching (Expires Headers) ---
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # HTML (Do not cache heavily, as data changes)
+    ExpiresByType text/html "access plus 0 seconds"
+    
+    # CSS and JavaScript
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    
+    # Images
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    
+    # Fonts
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
+    ExpiresByType application/x-font-ttf "access plus 1 year"
+</IfModule>
+
+# --- Remove ETags (Helps with caching and load balancing) ---
+<IfModule mod_headers.c>
+    Header unset ETag
+    FileETag None
+</IfModule> -->

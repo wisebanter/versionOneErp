@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 - Page Not Found</title>
+  </head>
+  <body style="margin: 0; padding: 0; background-color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box;">
+    <section style="padding: 40px 20px; width: 100%; max-width: 1140px; margin: 0 auto; box-sizing: border-box; text-align: center;">
+      <div style="width: 100%; max-width: 900px; margin: 0 auto; box-sizing: border-box;">
+        <!-- 404 Animated Background Layer -->
+        <div style="background-image: url('{{ url_for('templates/errors/dribbble_1.gif', _external: true) }}'); height: clamp(250px, 40vh, 400px); background-position: center; background-repeat: no-repeat; background-size: contain; display: flex; justify-content: center; align-items: center;">
+          <h1 style="font-size: clamp(60px, 10vw, 80px); margin: 0; font-weight: bold; color: #333;">{{ code }}</h1>
+        </div>
+
+        <!-- Content Box Info -->
+        <div style="margin-top: -20px; position: relative; z-index: 2; padding: 0 10px;">
+          <h3 style="font-size: clamp(24px, 4vw, 36px); margin: 0 0 10px 0; font-weight: 500; color: #333;">An  error occured</h3>
+
+          <p style="font-size: clamp(14px, 2vw, 16px); margin: 0 0 20px 0; color: #666; line-height: 1.4;">{{ message }}</p>
+
+          <a href="{{ url_for('/', _external: true) }}" style="color: #fff; padding: 12px 30px; background: #39ac31; margin: 10px 0; display: inline-block; text-decoration: none; border-radius: 4px; font-weight: 500; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: background 0.2s ease;">Go to Home</a>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

@@ -1,0 +1,2225 @@
+<!DOCTYPE html>
+<html lang="en" data-color-mode="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>/candidates/ – Manatal API Reference</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --primary:#1f7dc0; --primary-dark:#114468; --primary-darken-5:#1b6faa;
+  --primary-light:#4ba3de;
+  --primary-alpha-25:rgba(31,125,192,.25);
+  --primary-alpha-50:rgba(31,125,192,.5);
+  --primary-bg:rgba(31,125,192,.09);
+  --bg:#fff; --bg-alt:#fafafa; --bg-code:#242e34; --bg-hover:#f4f4f4;
+  --bg-glass:rgba(255,255,255,.85);
+  --border:#e5e5e5; --border-strong:#d4d4d4;
+  --text:#1b1b1b; --text-muted:#666; --text-subtle:#8a8a8a;
+  --method-get:#1f7dc0; --method-post:#2ea44f; --method-put:#c58c1f;
+  --method-patch:#8a5cf6; --method-del:#d63c3c;
+  --status-2xx:#1a7f37; --status-4xx:#cf222e; --status-5xx:#b02a37;
+  --radius:6px; --radius-lg:10px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,.08);
+  --shadow-lg:0 10px 30px rgba(0,0,0,.1);
+  --header-h:56px; --subheader-h:52px;
+  --sidebar-w:300px; --playground-w:480px;
+  --font:'Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',Consolas,monospace;
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-in-out:cubic-bezier(.4,0,.2,1);
+  --ease-bounce:cubic-bezier(.34,1.56,.64,1);
+}
+[data-color-mode="dark"]{
+  --bg:#161616; --bg-alt:#1d1d1d; --bg-hover:#2a2a2a;
+  --bg-glass:rgba(22,22,22,.85);
+  --border:#333; --border-strong:#444;
+  --text:#eaeaea; --text-muted:#a3a3a3; --text-subtle:#7a7a7a;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-md:0 4px 12px rgba(0,0,0,.5);
+  --shadow-lg:0 10px 30px rgba(0,0,0,.6);
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--font);font-size:14px;line-height:1.55;
+  color:var(--text);background:var(--bg);
+  -webkit-font-smoothing:antialiased;
+  transition:background .3s var(--ease-in-out),color .3s var(--ease-in-out);
+  overflow-x:hidden;
+}
+a{color:var(--primary);text-decoration:none;transition:color .2s}
+a:hover{color:var(--primary-darken-5)}
+button{font-family:inherit;font-size:inherit;cursor:pointer;border:none;background:none;color:inherit;position:relative;overflow:hidden}
+input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+img{max-width:100%;display:block}
+ul{list-style:none;margin:0;padding:0}
+code,pre{font-family:var(--font-mono)}
+
+/* ============================================================
+   AUTO-HIDE SCROLLBARS (global)
+   ============================================================ */
+*,*::before,*::after{scrollbar-width:thin;scrollbar-color:transparent transparent}
+*:hover{scrollbar-color:var(--border-strong) transparent}
+::-webkit-scrollbar{width:10px;height:10px;background:transparent}
+::-webkit-scrollbar-track{background:transparent;border:none}
+::-webkit-scrollbar-thumb{
+  background-color:transparent;border-radius:8px;
+  border:2px solid transparent;background-clip:padding-box;
+  transition:background-color .25s ease;
+}
+*:hover::-webkit-scrollbar-thumb{background-color:var(--border-strong);background-clip:padding-box}
+*:hover::-webkit-scrollbar-thumb:hover{background-color:var(--primary);background-clip:padding-box}
+::-webkit-scrollbar-corner{background:transparent}
+
+.code-body::-webkit-scrollbar,
+.acc-body pre::-webkit-scrollbar,
+.body-input::-webkit-scrollbar{height:8px;width:8px}
+.code-body::-webkit-scrollbar-thumb,
+.acc-body pre::-webkit-scrollbar-thumb,
+.body-input::-webkit-scrollbar-thumb{background-color:transparent;border:none;background-clip:padding-box}
+.code-body:hover::-webkit-scrollbar-thumb,
+.acc-body pre:hover::-webkit-scrollbar-thumb{background-color:rgba(255,255,255,.18)}
+.code-body:hover::-webkit-scrollbar-thumb:hover,
+.acc-body pre:hover::-webkit-scrollbar-thumb:hover{background-color:var(--primary)}
+.body-input:hover::-webkit-scrollbar-thumb{background-color:var(--border-strong)}
+.body-input:hover::-webkit-scrollbar-thumb:hover{background-color:var(--primary)}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.app{min-height:100vh;display:flex;flex-direction:column;opacity:0;animation:pageIn .5s var(--ease-out) .05s forwards}
+@keyframes pageIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.top-header{
+  position:sticky;top:0;z-index:50;
+  background:var(--bg-glass);
+  backdrop-filter:saturate(180%) blur(14px);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid var(--border);height:var(--header-h);
+  transition:box-shadow .25s;
+}
+.top-header.scrolled{box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.top-header-inner{max-width:1600px;margin:0 auto;height:100%;display:flex;align-items:center;gap:16px;padding:0 20px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--text);font-size:15px;transition:transform .25s var(--ease-bounce)}
+.brand:hover{transform:scale(1.03)}
+.brand img{width:32px;height:32px;border-radius:50%;transition:transform .4s var(--ease-bounce),box-shadow .25s}
+.brand:hover img{transform:rotate(-8deg) scale(1.08);box-shadow:0 0 0 3px var(--primary-alpha-25)}
+.top-nav{display:flex;align-items:center;gap:4px}
+.top-nav a{
+  display:inline-flex;align-items:center;gap:7px;padding:6px 12px;
+  border-radius:var(--radius);color:var(--text-muted);font-weight:500;
+  font-size:13.5px;position:relative;
+  transition:color .2s,background .2s,transform .2s;
+}
+.top-nav a i{font-size:12px;opacity:.75;transition:transform .3s var(--ease-bounce),opacity .2s}
+.top-nav a:hover{background:var(--bg-hover);color:var(--text);transform:translateY(-1px)}
+.top-nav a:hover i{opacity:1;transform:scale(1.15)}
+.top-nav a.active{color:var(--primary)}
+.top-nav a.active i{opacity:1}
+.top-nav a::after{
+  content:'';position:absolute;left:12px;right:12px;bottom:0;height:2px;
+  background:var(--primary);border-radius:2px 2px 0 0;
+  transform:scaleX(0);transform-origin:center;transition:transform .3s var(--ease-out);
+}
+.top-nav a.active::after,.top-nav a:hover::after{transform:scaleX(1)}
+
+.header-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.icon-btn{
+  width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;
+  border-radius:var(--radius);color:var(--text-muted);font-size:14px;
+  transition:background .2s,color .2s,transform .2s var(--ease-bounce);
+}
+.icon-btn:hover{background:var(--bg-hover);color:var(--text);transform:scale(1.05)}
+.icon-btn:active{transform:scale(.92)}
+
+.search-toggle{
+  display:inline-flex;align-items:center;gap:8px;padding:6px 10px 6px 12px;
+  border:1px solid var(--border);border-radius:var(--radius);
+  background:var(--bg);color:var(--text-muted);font-size:13px;min-width:180px;
+  transition:all .2s;
+}
+.search-toggle:hover{border-color:var(--primary);color:var(--text);box-shadow:0 0 0 3px var(--primary-alpha-25)}
+.kbd{
+  margin-left:auto;font-family:var(--font);font-size:11px;padding:2px 5px;
+  border:1px solid var(--border);border-radius:4px;
+  color:var(--text-subtle);background:var(--bg-alt);
+}
+.hamburger{display:none}
+
+.sub-header{
+  position:sticky;top:var(--header-h);z-index:40;
+  background:var(--bg-glass);
+  backdrop-filter:saturate(180%) blur(14px);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid var(--border);height:var(--subheader-h);
+}
+.sub-header-inner{max-width:1600px;margin:0 auto;height:100%;display:flex;align-items:center;gap:12px;padding:0 20px}
+.version-pill{
+  font-size:13px;color:var(--text-subtle);padding:4px 10px;
+  background:var(--bg-alt);border-radius:999px;
+  display:inline-flex;align-items:center;gap:6px;
+  position:relative;overflow:hidden;
+}
+.version-pill::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,var(--primary-alpha-25),transparent);
+  transform:translateX(-100%);animation:shimmer 3s infinite;
+}
+@keyframes shimmer{to{transform:translateX(100%)}}
+.sub-nav-link{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:var(--radius);color:var(--text);font-weight:500;font-size:13.5px}
+.sub-nav-link:hover{background:var(--bg-hover)}
+.sub-nav-link i{font-size:12px;color:var(--text-subtle)}
+.sidebar-toggle{
+  width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--border);border-radius:var(--radius);
+  color:var(--text-muted);font-size:13px;background:var(--bg);
+  transition:transform .3s var(--ease-bounce),background .2s,border-color .2s,color .2s;
+}
+.sidebar-toggle:hover{background:var(--bg-hover);color:var(--primary);border-color:var(--primary);transform:rotate(-15deg)}
+.app.sidebar-collapsed .sidebar-toggle{transform:rotate(180deg)}
+.app.sidebar-collapsed .sidebar-toggle:hover{transform:rotate(180deg) scale(1.05)}
+.mobile-title{display:none;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;margin-left:auto}
+
+.main-wrap{
+  flex:1;display:grid;
+  grid-template-columns:var(--sidebar-w) 1fr var(--playground-w);
+  max-width:1600px;margin:0 auto;width:100%;align-items:start;
+  transition:grid-template-columns .28s cubic-bezier(.4,0,.2,1);
+}
+.app.sidebar-collapsed .main-wrap{grid-template-columns:0 1fr var(--playground-w)}
+.app.sidebar-collapsed .sidebar{opacity:0;pointer-events:none}
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+.sidebar{
+  position:sticky;top:calc(var(--header-h) + var(--subheader-h));
+  height:calc(100vh - var(--header-h) - var(--subheader-h));
+  overflow-y:auto;overflow-x:hidden;
+  border-right:1px solid var(--border);
+  padding:16px 0;background:var(--bg);
+  transition:opacity .2s ease;
+}
+
+.sidebar-filter{padding:0 16px 14px;position:relative}
+.filter-wrap{
+  position:relative;display:flex;align-items:center;
+  border:1px solid var(--border);border-radius:10px;background:var(--bg);
+  transition:border-color .25s,box-shadow .3s var(--ease-in-out),transform .25s var(--ease-out);
+  overflow:hidden;
+}
+.filter-wrap:focus-within{
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px var(--primary-alpha-25);
+  transform:translateY(-1px);
+}
+.filter-icon{
+  position:absolute;left:12px;color:var(--text-subtle);font-size:12px;pointer-events:none;
+  transition:color .25s,transform .35s var(--ease-bounce);
+}
+.filter-wrap:focus-within .filter-icon{color:var(--primary);transform:scale(1.15) rotate(-8deg)}
+.filter-input{flex:1;width:100%;padding:10px 44px 10px 36px;border:none;background:transparent;font-size:13px;outline:none}
+.filter-input::placeholder{color:var(--text-subtle);transition:opacity .2s}
+.filter-wrap:focus-within .filter-input::placeholder{opacity:0}
+.filter-clear{
+  position:absolute;right:8px;width:22px;height:22px;display:none;
+  align-items:center;justify-content:center;border-radius:50%;
+  color:var(--text-subtle);font-size:11px;background:var(--bg-alt);
+}
+.filter-clear.show{display:inline-flex}
+.filter-clear:hover{background:var(--primary);color:#fff;transform:rotate(90deg)}
+.filter-kbd{position:absolute;right:34px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:10px;color:var(--text-subtle)}
+.filter-results{
+  display:flex;justify-content:space-between;align-items:center;gap:8px;
+  margin-top:8px;font-size:11px;color:var(--text-subtle);
+  height:0;overflow:hidden;opacity:0;transition:height .25s,opacity .2s;
+}
+.filter-wrap.has-value + .filter-results{height:20px;opacity:1}
+.filter-results .count{font-weight:600;color:var(--primary)}
+.filter-results .clear-all{color:var(--text-subtle);cursor:pointer;padding:2px 6px;border-radius:4px;font-size:11px}
+.filter-results .clear-all:hover{color:var(--primary);background:var(--primary-bg)}
+mark.hl{background:linear-gradient(180deg,transparent 55%,rgba(255,214,0,.55) 55%);color:inherit;padding:0 1px;border-radius:2px}
+
+.filter-empty{display:none;padding:20px 16px;text-align:center;color:var(--text-subtle);font-size:12.5px}
+.filter-empty i{display:block;font-size:24px;margin-bottom:8px;opacity:.35}
+.sidebar.filtering-empty .filter-empty{display:block}
+
+.sidebar-section{padding:0 12px;margin-bottom:6px}
+.sidebar-heading{
+  font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--text-subtle);font-weight:600;padding:10px 8px 6px;margin:0;
+  display:flex;align-items:center;gap:8px;
+}
+.sidebar-heading i{font-size:10px;color:var(--primary);transition:transform .3s var(--ease-bounce)}
+.sidebar-section:hover .sidebar-heading i{transform:scale(1.2) rotate(-8deg)}
+.sidebar-link{
+  display:flex;align-items:center;gap:8px;padding:6px 8px;
+  border-radius:var(--radius);color:var(--text-muted);font-size:13.5px;
+  line-height:1.4;cursor:pointer;position:relative;
+  transition:background .2s,color .2s,transform .15s var(--ease-out);
+}
+.sidebar-link::before{
+  content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;
+  border-radius:0 3px 3px 0;background:var(--primary);
+  transform:scaleY(0);transform-origin:center;transition:transform .25s var(--ease-out);
+}
+.sidebar-link:hover{background:var(--bg-hover);color:var(--text);transform:translateX(2px)}
+.sidebar-link:hover::before{transform:scaleY(1)}
+.sidebar-link.active{color:var(--primary);background:var(--primary-bg);font-weight:500}
+.sidebar-link.active::before{transform:scaleY(1)}
+.sidebar-link > i:first-child{
+  font-size:12px;width:14px;text-align:center;color:var(--text-subtle);flex-shrink:0;
+  transition:color .2s,transform .3s var(--ease-bounce);
+}
+.sidebar-link:hover > i:first-child{color:var(--primary);transform:scale(1.15)}
+.sidebar-link.active > i:first-child{color:var(--primary)}
+.sidebar-link-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sidebar-link-parent .sidebar-link-text{font-weight:500;color:var(--text)}
+.sidebar-expand{
+  width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;
+  color:var(--text-subtle);transition:transform .3s var(--ease-out);font-size:10px;
+}
+.sidebar-item.open .sidebar-expand{transform:rotate(90deg)}
+.sidebar-item.open > .sidebar-link > i:first-child{color:var(--primary)}
+
+.subpages{
+  padding-left:0;margin-left:0;border-left:1px solid transparent;
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height .35s var(--ease-out),opacity .25s var(--ease-out),
+             padding-left .3s var(--ease-out),margin-left .3s var(--ease-out),
+             border-color .3s var(--ease-out);
+}
+.sidebar-item.open > .subpages{
+  max-height:1400px;padding-left:14px;margin-left:8px;
+  border-left-color:var(--border);opacity:1;
+}
+.subpage .sidebar-link{font-size:12.8px;padding:5px 8px;color:var(--text-muted)}
+.subpage .sidebar-link i:first-child{font-size:10px}
+.subpage .sidebar-link.active{color:var(--primary);background:var(--primary-bg)}
+.subpage .sidebar-link:hover{transform:translateX(3px)}
+
+.sidebar-method{
+  font-size:9.5px;font-weight:700;text-transform:uppercase;
+  padding:2px 5px;border-radius:3px;color:#fff;letter-spacing:.03em;flex-shrink:0;
+  transition:transform .2s var(--ease-bounce);
+}
+.sidebar-link:hover .sidebar-method{transform:scale(1.1)}
+.sidebar-method.get{background:var(--method-get);cursor:pointer}
+.sidebar-method.post{background:var(--method-post);cursor:pointer}
+.sidebar-method.put{background:var(--method-put);cursor:pointer}
+.sidebar-method.patch{background:var(--method-patch);cursor:pointer}
+.sidebar-method.del{background:var(--method-del);cursor:pointer}
+
+.sidebar-footer{
+  padding:20px 20px 8px;font-size:11.5px;color:var(--text-subtle);
+  border-top:1px solid var(--border);margin-top:12px;
+  display:flex;align-items:center;gap:6px;
+}
+.sidebar-footer i{font-size:11px;color:var(--primary);animation:bolt 2.5s ease-in-out infinite}
+@keyframes bolt{
+  0%,90%,100%{transform:scale(1);color:var(--primary)}
+  92%{transform:scale(1.3) rotate(-10deg);color:#ffc107}
+  94%{transform:scale(1.3) rotate(10deg);color:#ffc107}
+  96%{transform:scale(1.2);color:var(--primary)}
+}
+.sidebar-footer a{color:var(--text-subtle);text-decoration:underline}
+
+/* ============================================================
+   CONTENT
+   ============================================================ */
+.content{padding:28px 40px 60px;min-width:0;max-width:900px}
+.copy-page-row{display:flex;justify-content:flex-end;margin-bottom:16px}
+.copy-page-btn{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 12px;
+  border:1px solid var(--border);border-radius:var(--radius);
+  font-size:13px;color:var(--text-muted);background:var(--bg);transition:all .25s;
+}
+.copy-page-btn:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-1px);box-shadow:0 4px 12px rgba(31,125,192,.15)}
+.copy-page-btn:active{transform:translateY(0) scale(.97)}
+
+.endpoint-title{
+  font-size:28px;font-weight:700;margin:0 0 12px;
+  color:var(--text);letter-spacing:-.01em;word-break:break-word;position:relative;
+}
+.endpoint-title::after{
+  content:'';display:block;width:60px;height:3px;
+  background:linear-gradient(90deg,var(--primary),transparent);
+  border-radius:3px;margin-top:8px;transform-origin:left;
+  animation:titleUnderline 1s var(--ease-out) .3s backwards;
+}
+@keyframes titleUnderline{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+.endpoint-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;animation:fadeSlideUp .5s var(--ease-out) .15s backwards}
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.method{
+  display:inline-flex;align-items:center;gap:5px;padding:4px 10px;
+  border-radius:var(--radius);font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.04em;color:#fff;flex-shrink:0;
+}
+.method.get{background:var(--method-get)}
+.method.post{background:var(--method-post)}
+.method.put{background:var(--method-put)}
+.method.patch{background:var(--method-patch)}
+.method.del{background:var(--method-del)}
+
+.endpoint-url{font-family:var(--font-mono);font-size:13px;color:var(--text-muted);word-break:break-all;flex:1;min-width:0}
+.endpoint-desc{font-size:15px;color:var(--text-muted);margin:0 0 24px;animation:fadeSlideUp .5s var(--ease-out) .25s backwards}
+
+.recent-box{border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:28px;background:var(--bg);transition:box-shadow .3s,transform .3s;animation:fadeSlideUp .5s var(--ease-out) .35s backwards}
+.recent-box:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.recent-header{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:var(--bg-alt);border-bottom:1px solid var(--border);font-size:13px;flex-wrap:wrap;gap:8px}
+.recent-header h4{margin:0;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.recent-header h4 i{color:var(--primary);font-size:12px}
+.recent-lock{display:inline-flex;align-items:center;gap:6px;color:var(--text-muted);font-size:12.5px}
+.recent-table{width:100%;border-collapse:collapse;font-size:13px}
+.recent-table th{text-align:left;padding:8px 16px;font-weight:500;color:var(--text-subtle);font-size:12px;border-bottom:1px solid var(--border);background:var(--bg-alt)}
+.recent-table td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--text-muted)}
+.recent-table tbody tr{transition:background .2s}
+.recent-table tbody tr:hover{background:var(--bg-hover)}
+.status-code{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:12px;font-weight:500}
+.status-code i{font-size:8px}
+.status-4xx{color:var(--status-4xx)}
+.status-2xx{color:var(--status-2xx)}
+.badge-try{display:inline-flex;align-items:center;gap:5px;padding:2px 6px;border-radius:4px;font-size:10.5px;font-weight:600;background:var(--primary-bg);color:var(--primary)}
+.badge-try i{font-size:8px}
+.recent-graph{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;font-size:12px;color:var(--text-subtle);border-top:1px solid var(--border);background:var(--bg-alt);gap:12px;flex-wrap:wrap}
+.sparkline{display:flex;align-items:flex-end;gap:2px;height:20px}
+.sparkline span{width:5px;background:var(--primary);border-radius:2px;opacity:.55;animation:barGrow .6s var(--ease-out) backwards}
+@keyframes barGrow{from{transform:scaleY(0);transform-origin:bottom}to{transform:scaleY(1);transform-origin:bottom}}
+
+.section-heading{
+  display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;
+  margin:32px 0 14px;padding-bottom:6px;border-bottom:1px solid var(--border);color:var(--text);position:relative;
+}
+.section-heading::after{
+  content:'';position:absolute;left:0;bottom:-1px;width:40px;height:2px;
+  background:var(--primary);border-radius:2px;transform-origin:left;
+  animation:titleUnderline .8s var(--ease-out) .5s backwards;
+}
+.section-heading > i{color:var(--primary);font-size:14px}
+.section-heading a{color:var(--text-subtle);opacity:0;transition:opacity .15s;font-size:13px}
+.section-heading:hover a{opacity:1}
+
+.params{display:flex;flex-direction:column;gap:0}
+.param{
+  display:grid;grid-template-columns:1fr 220px;gap:16px;
+  padding:14px 12px;margin:0 -12px;border-bottom:1px solid var(--border);
+  border-radius:8px;align-items:start;transition:background .2s,transform .2s;
+}
+.param:hover{background:var(--bg-alt);transform:translateX(3px)}
+.param:last-child{border-bottom:none}
+.param-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.param-name{font-family:var(--font-mono);font-size:13.5px;font-weight:600;color:var(--text);transition:color .2s}
+.param:hover .param-name{color:var(--primary)}
+.param-type{font-size:11.5px;color:var(--text-subtle);padding:1px 6px;background:var(--bg-alt);border-radius:4px;border:1px solid var(--border);display:inline-flex;align-items:center;gap:4px}
+.param-type i{font-size:9px;color:var(--primary)}
+.param-desc{font-size:13px;color:var(--text-muted);margin-top:4px}
+.param-input{
+  width:100%;padding:7px 10px;border:1px solid var(--border);
+  border-radius:var(--radius);background:var(--bg);
+  font-family:var(--font-mono);font-size:12.5px;outline:none;
+  transition:border-color .2s,box-shadow .25s,transform .2s;
+}
+.param-input:focus{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-alpha-25);transform:translateY(-1px)}
+.param-input.invalid{border-color:var(--status-4xx);box-shadow:0 0 0 3px rgba(207,34,46,.15);background:rgba(207,34,46,.04)}
+.param-input.valid{border-color:var(--status-2xx)}
+.param-error{display:none;font-size:11px;color:var(--status-4xx);margin-top:4px;font-family:var(--font);align-items:center;gap:4px}
+.param-error.show{display:inline-flex}
+.param-error i{font-size:10px}
+
+.response-accordion{border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:box-shadow .3s}
+.response-accordion:hover{box-shadow:var(--shadow)}
+.acc-item{border-bottom:1px solid var(--border)}
+.acc-item:last-child{border-bottom:none}
+.acc-header{width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;font-size:13.5px;font-weight:500;color:var(--text);text-align:left;transition:background .2s}
+.acc-header:hover{background:var(--bg-hover)}
+.acc-header > i{font-size:12px;color:var(--text-subtle);transition:transform .3s var(--ease-out)}
+.acc-item.open .acc-header > i{transform:rotate(90deg);color:var(--primary)}
+.acc-body{max-height:0;overflow:hidden;padding:0 16px;opacity:0;transition:max-height .4s var(--ease-out),opacity .25s var(--ease-out),padding .3s var(--ease-out)}
+.acc-item.open .acc-body{max-height:600px;padding:0 16px 16px;opacity:1}
+.acc-body pre{background:var(--bg-code);color:#e6e6e6;padding:14px;border-radius:var(--radius);overflow:auto;font-size:12px;line-height:1.6;margin:0}
+
+.content-footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--border)}
+.content-footer .updated{font-size:12px;color:var(--text-subtle);margin-bottom:16px;display:inline-flex;align-items:center;gap:6px}
+.pager{display:flex;justify-content:space-between;gap:16px}
+.pager a{
+  display:flex;align-items:center;gap:12px;padding:10px 14px;
+  border:1px solid var(--border);border-radius:var(--radius);
+  font-size:13px;color:var(--text-muted);flex:1;min-width:0;
+  transition:all .25s;position:relative;overflow:hidden;
+}
+.pager a:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);box-shadow:0 6px 16px rgba(31,125,192,.15)}
+.pager a > i{font-size:14px;color:var(--text-subtle);transition:transform .3s;position:relative}
+.pager a:hover > i{color:var(--primary)}
+.pager a:not(.next):hover > i{transform:translateX(-3px)}
+.pager a.next:hover > i{transform:translateX(3px)}
+.pager .pager-info{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.pager .pager-label{font-size:11px;color:var(--text-subtle);text-transform:uppercase;letter-spacing:.04em}
+.pager .pager-title{color:var(--text);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pager .next{flex-direction:row-reverse;text-align:right}
+.pager .next .pager-info{align-items:flex-end}
+
+/* ============================================================
+   PLAYGROUND
+   ============================================================ */
+.playground{
+  position:sticky;top:calc(var(--header-h) + var(--subheader-h));
+  height:calc(100vh - var(--header-h) - var(--subheader-h));
+  overflow-y:auto;border-left:1px solid var(--border);padding:20px;background:var(--bg-alt);
+}
+.pg-section{margin-bottom:24px;animation:fadeSlideUp .4s var(--ease-out) backwards}
+.pg-section:nth-child(1){animation-delay:.05s}
+.pg-section:nth-child(2){animation-delay:.12s}
+.pg-section:nth-child(3){animation-delay:.19s}
+.pg-section:nth-child(4){animation-delay:.26s}
+.pg-heading{font-size:13px;font-weight:600;margin:0 0 10px;color:var(--text);display:flex;align-items:center;gap:8px}
+.pg-heading i{color:var(--primary);font-size:12px}
+
+.method-picker{display:flex;gap:4px;flex-wrap:wrap}
+.method-pick{
+  padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius);
+  background:var(--bg);font-size:11px;font-weight:700;letter-spacing:.04em;
+  color:var(--text-muted);transition:all .2s;text-transform:uppercase;
+}
+.method-pick:hover{border-color:var(--border-strong);color:var(--text);transform:translateY(-1px)}
+.method-pick.active[data-method="get"]{background:var(--method-get);border-color:var(--method-get);color:#fff;box-shadow:0 4px 12px rgba(31,125,192,.35)}
+.method-pick.active[data-method="post"]{background:var(--method-post);border-color:var(--method-post);color:#fff;box-shadow:0 4px 12px rgba(46,164,79,.35)}
+.method-pick.active[data-method="put"]{background:var(--method-put);border-color:var(--method-put);color:#fff;box-shadow:0 4px 12px rgba(197,140,31,.35)}
+.method-pick.active[data-method="patch"]{background:var(--method-patch);border-color:var(--method-patch);color:#fff;box-shadow:0 4px 12px rgba(138,92,246,.35)}
+.method-pick.active[data-method="del"]{background:var(--method-del);border-color:var(--method-del);color:#fff;box-shadow:0 4px 12px rgba(214,60,60,.35)}
+
+.body-input{
+  width:100%;padding:10px 12px;border:1px solid var(--border);
+  border-radius:var(--radius);background:var(--bg);
+  font-family:var(--font-mono);font-size:12px;line-height:1.55;
+  color:var(--text);resize:vertical;min-height:110px;outline:none;
+  transition:border-color .2s,box-shadow .25s;
+}
+.body-input:focus{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-alpha-25)}
+.body-input.invalid{border-color:var(--status-4xx);box-shadow:0 0 0 3px rgba(207,34,46,.15);background:rgba(207,34,46,.04)}
+.body-error{display:none;font-size:11px;color:var(--status-4xx);margin-top:6px;align-items:center;gap:4px}
+.body-error.show{display:inline-flex}
+
+.lang-picker{display:flex;flex-wrap:wrap;gap:4px}
+.lang-btn{
+  padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);
+  background:var(--bg);font-size:12.5px;color:var(--text-muted);
+  display:inline-flex;align-items:center;gap:7px;transition:all .25s;position:relative;overflow:hidden;
+}
+.lang-btn:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 10px rgba(31,125,192,.15)}
+.lang-btn.active{
+  background:linear-gradient(135deg,var(--primary),var(--primary-darken-5));
+  border-color:var(--primary);color:#fff;box-shadow:0 4px 14px rgba(31,125,192,.35);
+}
+
+.cred-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px}
+.cred-tag{font-size:11px;padding:2px 8px;background:var(--bg-alt);border:1px solid var(--border);border-radius:999px;color:var(--text-muted);display:inline-flex;align-items:center;gap:5px}
+.cred-input{display:flex;gap:6px}
+.cred-input input{
+  flex:1;padding:8px 10px;border:1px solid var(--border);
+  border-radius:var(--radius);background:var(--bg);
+  font-family:var(--font-mono);font-size:12px;outline:none;
+  transition:border-color .2s,box-shadow .25s;
+}
+.cred-input input:focus{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-alpha-25)}
+.cred-input input.invalid{border-color:var(--status-4xx);box-shadow:0 0 0 3px rgba(207,34,46,.15)}
+.cred-error{display:none;font-size:11px;color:var(--status-4xx);margin-top:6px;align-items:center;gap:4px}
+.cred-error.show{display:inline-flex}
+
+.code-block{
+  background:var(--bg-code);border-radius:var(--radius);overflow:hidden;
+  font-family:var(--font-mono);font-size:12px;line-height:1.6;position:relative;
+}
+.code-top{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 12px;background:rgba(255,255,255,.04);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:11.5px;color:#9aa5b1;position:relative;
+}
+.code-top::before{
+  content:'';width:44px;height:10px;
+  background:
+    radial-gradient(circle at 5px 5px,#ff5f56 4px,transparent 5px),
+    radial-gradient(circle at 17px 5px,#ffbd2e 4px,transparent 5px),
+    radial-gradient(circle at 29px 5px,#27c93f 4px,transparent 5px);
+  background-repeat:no-repeat;position:absolute;top:50%;left:12px;transform:translateY(-50%);opacity:.7;
+}
+.code-top > span:first-child{margin-left:52px}
+.code-copy{color:#9aa5b1;padding:4px;font-size:12px;border-radius:4px;transition:all .2s}
+.code-copy:hover{color:#fff;background:rgba(255,255,255,.08)}
+.code-body{padding:12px 14px;color:#d6dee6;white-space:pre;overflow-x:auto}
+.code-body .kw{color:#c792ea}
+.code-body .str{color:#c3e88d}
+.code-body .var{color:#82aaff}
+.code-body .fn{color:#ffcb6b}
+.code-body .num{color:#f78c6c}
+.code-body .com{color:#7a8a99;font-style:italic}
+
+.try-btn{
+  width:100%;padding:11px;
+  background:linear-gradient(135deg,var(--primary),var(--primary-darken-5));
+  background-size:200% 200%;color:#fff;border-radius:var(--radius);
+  font-weight:600;font-size:13px;margin-top:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .3s;position:relative;overflow:hidden;
+  box-shadow:0 4px 12px rgba(31,125,192,.25);
+}
+.try-btn::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+  transition:left .5s;
+}
+.try-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(31,125,192,.4);background-position:100% 0}
+.try-btn:hover::before{left:100%}
+.try-btn:active{transform:translateY(0) scale(.98)}
+.try-btn:disabled{opacity:.75;cursor:not-allowed;transform:none}
+
+.response-panel{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;transition:box-shadow .3s}
+.response-panel:hover{box-shadow:var(--shadow)}
+.response-panel h4{margin:0 0 12px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+.response-panel h4 i{color:var(--primary);font-size:12px}
+.response-empty{font-size:12.5px;color:var(--text-subtle);line-height:1.6;padding:14px;background:var(--bg-alt);border-radius:var(--radius);border:1px dashed var(--border)}
+.response-empty code{background:var(--bg);padding:1px 5px;border-radius:3px;border:1px solid var(--border);font-size:11.5px}
+.response-example-btn{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;background:var(--bg);color:var(--text);transition:all .2s}
+.response-example-btn:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-1px)}
+.status-pill{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11.5px;font-weight:600}
+.status-pill i{font-size:8px}
+
+.response-result-box{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 12px;background:var(--bg-alt);
+  border:1px solid var(--border);border-radius:var(--radius);
+  margin-bottom:10px;font-size:12px;gap:10px;flex-wrap:wrap;
+}
+.response-meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.response-meta span{display:inline-flex;align-items:center;gap:5px;color:var(--text-muted);font-family:var(--font-mono);font-size:11.5px}
+.response-meta span i{font-size:10px;color:var(--primary)}
+.status-ok{color:var(--status-2xx) !important;font-weight:600}
+.status-err{color:var(--status-4xx) !important;font-weight:600}
+.status-warn{color:#c58c1f !important;font-weight:600}
+
+.toast-stack{position:fixed;bottom:24px;right:24px;z-index:200;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{
+  display:flex;align-items:center;gap:10px;padding:12px 16px;
+  background:var(--bg);color:var(--text);border:1px solid var(--border);
+  border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);
+  font-size:13px;font-weight:500;min-width:220px;max-width:380px;
+  pointer-events:auto;animation:toastIn .4s var(--ease-bounce);
+  border-left:3px solid var(--primary);
+}
+.toast.out{animation:toastOut .3s forwards}
+.toast i{color:var(--primary);font-size:14px;flex-shrink:0}
+.toast.success i{color:var(--method-post)}
+.toast.success{border-left-color:var(--method-post)}
+.toast.error i{color:var(--status-4xx)}
+.toast.error{border-left-color:var(--status-4xx)}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px) scale(.9)}to{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes toastOut{to{opacity:0;transform:translateX(40px) scale(.9)}}
+
+.mobile-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:60;backdrop-filter:blur(3px)}
+.mobile-overlay.show{display:block}
+
+@media (max-width:1280px){:root{--playground-w:400px;--sidebar-w:280px}}
+@media (max-width:1080px){
+  .main-wrap{grid-template-columns:var(--sidebar-w) 1fr}
+  .app.sidebar-collapsed .main-wrap{grid-template-columns:0 1fr}
+  .playground{position:relative;top:auto;height:auto;grid-column:1/-1;border-left:none;border-top:1px solid var(--border)}
+}
+@media (max-width:860px){
+  :root{--sidebar-w:280px}
+  .top-nav{display:none}
+  .search-toggle{display:none}
+  .hamburger{display:inline-flex}
+  .sidebar-toggle{display:none}
+  .sub-header .sub-nav-link{display:none}
+  .mobile-title{display:inline-flex}
+  .main-wrap{grid-template-columns:1fr !important}
+  .sidebar{
+    position:fixed;top:0;left:0;bottom:0;width:280px;height:100vh;
+    background:var(--bg);z-index:70;transform:translateX(-100%);
+    transition:transform .25s;border-right:1px solid var(--border);
+    padding-top:20px;opacity:1 !important;pointer-events:auto !important;
+  }
+  .sidebar.open{transform:translateX(0);box-shadow:0 0 60px rgba(0,0,0,.35)}
+  .content{padding:20px 16px 40px}
+  .endpoint-title{font-size:22px}
+  .param{grid-template-columns:1fr;gap:8px}
+  .pager{flex-direction:column}
+  .pager .next{text-align:left;flex-direction:row}
+  .pager .next .pager-info{align-items:flex-start}
+}
+@media (max-width:480px){
+  .top-header-inner{padding:0 12px;gap:8px}
+  .brand span{display:none}
+  .sub-header-inner{padding:0 12px}
+  .endpoint-title{font-size:20px}
+  .endpoint-url{font-size:11.5px}
+  .lang-btn{font-size:11.5px;padding:5px 8px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+<div class="app" id="appRoot">
+
+  <!-- TOP HEADER -->
+  <header class="top-header" id="topHeader">
+    <div class="top-header-inner">
+      <button class="icon-btn hamburger" id="menuToggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <a href="#" class="brand">
+        <img src="https://files.readme.io/70ea62c-small-manatal_logo_square_100x100.png" alt="lll" />
+        <span>LLL</span>
+      </a>
+      <nav class="top-nav">
+        <a href="#"><i class="fa-solid fa-house"></i>Home</a>
+        <a href="#"><i class="fa-solid fa-book"></i>Guides</a>
+        <a href="#" class="active"><i class="fa-solid fa-code"></i>API Reference</a>
+        <a href="#"><i class="fa-solid fa-bullhorn"></i>Announcements</a>
+      </nav>
+      <div class="header-right">
+        <a href="#" style="font-size:13px;color:var(--text-muted);padding:6px 10px;border-radius:var(--radius);display:inline-flex;align-items:center;gap:6px">
+          <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:11px"></i>Visit Website
+        </a>
+        <button class="search-toggle" aria-label="Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <span>Search</span>
+          <span class="kbd">CTRL-K</span>
+        </button>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SUB HEADER -->
+  <div class="sub-header">
+    <div class="sub-header-inner">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar" title="Collapse sidebar">
+        <i class="fa-solid fa-angles-left"></i>
+      </button>
+      <span class="version-pill"><i class="fa-solid fa-code-branch"></i>new OpenAPI</span>
+      <button class="sub-nav-link">
+        <i class="fa-solid fa-book-open"></i>
+        <span>API Reference</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+      <button class="mobile-title">
+        <span>/candidates/</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="main-wrap">
+
+    <!-- ======================================================
+         SIDEBAR
+         ====================================================== -->
+    <aside class="sidebar" id="sidebar">
+
+      <div class="sidebar-filter">
+        <div class="filter-wrap" id="filterWrap">
+          <i class="fa-solid fa-magnifying-glass filter-icon"></i>
+          <input type="search" class="filter-input" id="filterInput" placeholder="Filter endpoints…" autocomplete="off" spellcheck="false" />
+          <span class="kbd filter-kbd">⌘/</span>
+          <button class="filter-clear" id="filterClear" aria-label="Clear filter"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="filter-results">
+          <span><span class="count" id="filterCount">0</span> matches</span>
+          <button class="clear-all" id="filterClearAll"><i class="fa-solid fa-xmark" style="font-size:9px"></i> Clear</button>
+        </div>
+      </div>
+      <div class="filter-empty">
+        <i class="fa-solid fa-magnifying-glass-minus"></i>
+        No matching pages found
+      </div>
+
+      <!-- ============ OVERVIEW ============ -->
+      <div class="sidebar-section">
+        <h2 class="sidebar-heading"><i class="fa-solid fa-circle-info"></i>Overview</h2>
+        <ul class="sidebar-list">
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="#">
+              <i class="fa-solid fa-rocket"></i>
+              <span class="sidebar-link-text">Welcome to Manatal's API documentation</span>
+            </a>
+          </li>
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-circle-info"></i>
+              <span class="sidebar-link-text">General information</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-key"></i><span class="sidebar-link-text">Authorization</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-gauge"></i><span class="sidebar-link-text">Rate limiting</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-webhook"></i><span class="sidebar-link-text">Webhooks</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list-ol"></i><span class="sidebar-link-text">Pagination</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-link"></i><span class="sidebar-link-text">Link validity</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-triangle-exclamation"></i><span class="sidebar-link-text">Error handling</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-file-code"></i><span class="sidebar-link-text">Formats</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-pen-to-square"></i><span class="sidebar-link-text">Custom fields</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-upload"></i><span class="sidebar-link-text">Uploading a file</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-flask"></i><span class="sidebar-link-text">Testing with Postman</span></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ============ GUIDES ============ -->
+      <div class="sidebar-section">
+        <h2 class="sidebar-heading"><i class="fa-solid fa-book"></i>Guides</h2>
+        <ul class="sidebar-list">
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="#">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span class="sidebar-link-text">Dynamic application forms</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ============ OBJECT MODELS ============ -->
+      <div class="sidebar-section">
+        <h2 class="sidebar-heading"><i class="fa-solid fa-cubes"></i>Object Models</h2>
+        <ul class="sidebar-list">
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-user"></i>
+              <span class="sidebar-link-text">Candidates</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-graduation-cap"></i><span class="sidebar-link-text">Candidate educations</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-briefcase"></i><span class="sidebar-link-text">Candidate experience</span></a></li>
+            </ul>
+          </li>
+          <li class="sidebar-item"><a class="sidebar-link" href="#"><i class="fa-solid fa-wave-square"></i><span class="sidebar-link-text">Activity</span></a></li>
+          <li class="sidebar-item"><a class="sidebar-link" href="#"><i class="fa-solid fa-address-book"></i><span class="sidebar-link-text">Contacts</span></a></li>
+          <li class="sidebar-item"><a class="sidebar-link" href="#"><i class="fa-solid fa-paperclip"></i><span class="sidebar-link-text">Attachment</span></a></li>
+          <li class="sidebar-item"><a class="sidebar-link" href="#"><i class="fa-solid fa-briefcase"></i><span class="sidebar-link-text">Jobs</span></a></li>
+          <li class="sidebar-item"><a class="sidebar-link" href="#"><i class="fa-solid fa-note-sticky"></i><span class="sidebar-link-text">Note</span></a></li>
+          <li class="sidebar-item"><a class="sidebar-link" href="#"><i class="fa-solid fa-people-arrows"></i><span class="sidebar-link-text">Matches</span></a></li>
+          <li class="sidebar-item"><a class="sidebar-link" href="#"><i class="fa-solid fa-users"></i><span class="sidebar-link-text">Users</span></a></li>
+          <li class="sidebar-item"><a class="sidebar-link" href="#"><i class="fa-solid fa-building"></i><span class="sidebar-link-text">Organizations</span></a></li>
+          <li class="sidebar-item"><a class="sidebar-link" href="#"><i class="fa-solid fa-file-lines"></i><span class="sidebar-link-text">Application form</span></a></li>
+          <li class="sidebar-item"><a class="sidebar-link" href="#"><i class="fa-solid fa-diagram-project"></i><span class="sidebar-link-text">Job Pipeline Stage</span></a></li>
+        </ul>
+      </div>
+
+      <!-- ============ CAREER PAGE API ============ -->
+      <div class="sidebar-section">
+        <h2 class="sidebar-heading"><i class="fa-solid fa-globe"></i>Career Page API</h2>
+        <ul class="sidebar-list">
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-sitemap"></i>
+              <span class="sidebar-link-text">Career Page (Legacy)</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><span class="sidebar-link-text">/career-page/{client_slug}/jobs/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><span class="sidebar-link-text">/career-page/{client_slug}/jobs/{id}/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><span class="sidebar-link-text">/career-page/{client_slug}/jobs/{id}/application-form/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><span class="sidebar-link-text">/career-page/{client_slug}/jobs/{id}/application-form/</span><span class="sidebar-method post">post</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><span class="sidebar-link-text">/career-page/{client_slug}/jobs/{id}/apply/</span><span class="sidebar-method post">post</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><span class="sidebar-link-text">/career-page/{client_slug}/jobs/{id}/refer/</span><span class="sidebar-method post">post</span></a></li>
+            </ul>
+          </li>
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-globe"></i>
+              <span class="sidebar-link-text">Career Page</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-briefcase"></i><span class="sidebar-link-text">Get Job Post</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-file-lines"></i><span class="sidebar-link-text">Get Application Form for Job Post</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-paper-plane"></i><span class="sidebar-link-text">Submit Application to Job Post</span><span class="sidebar-method post">post</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-share"></i><span class="sidebar-link-text">Submit Referral to Job Post</span><span class="sidebar-method post">post</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-file-lines"></i><span class="sidebar-link-text">Get Application Form</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">List Job Posts</span><span class="sidebar-method get">get</span></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ============ MANATAL OPEN API ============ -->
+      <div class="sidebar-section">
+        <h2 class="sidebar-heading"><i class="fa-solid fa-terminal"></i>Manatal Open API</h2>
+        <ul class="sidebar-list">
+
+          <!-- candidates -->
+          <li class="sidebar-item open" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-user"></i>
+              <span class="sidebar-link-text">candidates</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link active" href="#" data-method-link="get"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">/candidates/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#" data-method-link="post"><i class="fa-solid fa-plus"></i><span class="sidebar-link-text">/candidates/</span><span class="sidebar-method post">post</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#" data-method-link="put"><i class="fa-solid fa-pen"></i><span class="sidebar-link-text">/candidates/{id}/</span><span class="sidebar-method put">put</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#" data-method-link="patch"><i class="fa-solid fa-eraser"></i><span class="sidebar-link-text">/candidates/{id}/</span><span class="sidebar-method patch">patch</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#" data-method-link="del"><i class="fa-solid fa-trash"></i><span class="sidebar-link-text">/candidates/{id}/</span><span class="sidebar-method del">delete</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-wave-square"></i><span class="sidebar-link-text">/candidates/{pk}/activities/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-paperclip"></i><span class="sidebar-link-text">/candidates/{pk}/attachments/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-graduation-cap"></i><span class="sidebar-link-text">/candidates/{pk}/educations/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-briefcase"></i><span class="sidebar-link-text">/candidates/{pk}/experiences/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-people-arrows"></i><span class="sidebar-link-text">/candidates/{pk}/matches/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-flag"></i><span class="sidebar-link-text">/candidates/{pk}/nationalities/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-note-sticky"></i><span class="sidebar-link-text">/candidates/{pk}/notes/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-file-pdf"></i><span class="sidebar-link-text">/candidates/{pk}/resume/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-share-nodes"></i><span class="sidebar-link-text">/candidates/{pk}/social-media/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-star"></i><span class="sidebar-link-text">/candidates/{pk}/skills/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-tags"></i><span class="sidebar-link-text">/candidates/{pk}/tags/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-layer-group"></i><span class="sidebar-link-text">/candidates/{pk}/skills/bulk/</span><span class="sidebar-method post">post</span></a></li>
+            </ul>
+          </li>
+
+          <!-- contacts -->
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-address-book"></i>
+              <span class="sidebar-link-text">contacts</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">/contacts/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-plus"></i><span class="sidebar-link-text">/contacts/</span><span class="sidebar-method post">post</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-user"></i><span class="sidebar-link-text">/contacts/{id}/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-pen"></i><span class="sidebar-link-text">/contacts/{id}/</span><span class="sidebar-method patch">patch</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-trash"></i><span class="sidebar-link-text">/contacts/{id}/</span><span class="sidebar-method del">del</span></a></li>
+            </ul>
+          </li>
+
+          <!-- currencies -->
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-coins"></i>
+              <span class="sidebar-link-text">currencies</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">/currencies/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-coins"></i><span class="sidebar-link-text">/currencies/{id}/</span><span class="sidebar-method get">get</span></a></li>
+            </ul>
+          </li>
+
+          <!-- industries -->
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-industry"></i>
+              <span class="sidebar-link-text">industries</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">/industries/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-industry"></i><span class="sidebar-link-text">/industries/{id}/</span><span class="sidebar-method get">get</span></a></li>
+            </ul>
+          </li>
+
+          <!-- jobs -->
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-briefcase"></i>
+              <span class="sidebar-link-text">jobs</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">/jobs/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-plus"></i><span class="sidebar-link-text">/jobs/</span><span class="sidebar-method post">post</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-briefcase"></i><span class="sidebar-link-text">/jobs/{id}/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-pen"></i><span class="sidebar-link-text">/jobs/{id}/</span><span class="sidebar-method patch">patch</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-trash"></i><span class="sidebar-link-text">/jobs/{id}/</span><span class="sidebar-method del">del</span></a></li>
+            </ul>
+          </li>
+
+          <!-- languages -->
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-language"></i>
+              <span class="sidebar-link-text">languages</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">/languages/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-language"></i><span class="sidebar-link-text">/languages/{id}/</span><span class="sidebar-method get">get</span></a></li>
+            </ul>
+          </li>
+
+          <!-- match-stages -->
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-diagram-project"></i>
+              <span class="sidebar-link-text">match-stages</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">/match-stages/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-diagram-project"></i><span class="sidebar-link-text">/match-stages/{id}/</span><span class="sidebar-method get">get</span></a></li>
+            </ul>
+          </li>
+
+          <!-- matches -->
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-people-arrows"></i>
+              <span class="sidebar-link-text">matches</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">/matches/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-plus"></i><span class="sidebar-link-text">/matches/</span><span class="sidebar-method post">post</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-people-arrows"></i><span class="sidebar-link-text">/matches/{id}/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-pen"></i><span class="sidebar-link-text">/matches/{id}/</span><span class="sidebar-method patch">patch</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-trash"></i><span class="sidebar-link-text">/matches/{id}/</span><span class="sidebar-method del">del</span></a></li>
+            </ul>
+          </li>
+
+          <!-- nationalities -->
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-flag"></i>
+              <span class="sidebar-link-text">nationalities</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">/nationalities/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-flag"></i><span class="sidebar-link-text">/nationalities/{id}/</span><span class="sidebar-method get">get</span></a></li>
+            </ul>
+          </li>
+
+          <!-- job-pipelines -->
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-diagram-successor"></i>
+              <span class="sidebar-link-text">job-pipelines</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">/job-pipelines/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-diagram-successor"></i><span class="sidebar-link-text">/job-pipelines/{id}/</span><span class="sidebar-method get">get</span></a></li>
+            </ul>
+          </li>
+
+          <!-- organizations -->
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-building"></i>
+              <span class="sidebar-link-text">organizations</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">/organizations/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-plus"></i><span class="sidebar-link-text">/organizations/</span><span class="sidebar-method post">post</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-building"></i><span class="sidebar-link-text">/organizations/{id}/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-pen"></i><span class="sidebar-link-text">/organizations/{id}/</span><span class="sidebar-method patch">patch</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-trash"></i><span class="sidebar-link-text">/organizations/{id}/</span><span class="sidebar-method del">del</span></a></li>
+            </ul>
+          </li>
+
+          <!-- skills -->
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-star"></i>
+              <span class="sidebar-link-text">skills</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">/skills/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-plus"></i><span class="sidebar-link-text">/skills/</span><span class="sidebar-method post">post</span></a></li>
+            </ul>
+          </li>
+
+          <!-- users -->
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-users"></i>
+              <span class="sidebar-link-text">users</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">/users/</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-user"></i><span class="sidebar-link-text">/users/{id}/</span><span class="sidebar-method get">get</span></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ============ MANAHOOK ============ -->
+      <div class="sidebar-section">
+        <h2 class="sidebar-heading"><i class="fa-solid fa-webhook"></i>Manahook</h2>
+        <ul class="sidebar-list">
+          <li class="sidebar-item" data-parent>
+            <a class="sidebar-link sidebar-link-parent" href="#">
+              <i class="fa-solid fa-webhook"></i>
+              <span class="sidebar-link-text">webhooks</span>
+              <span class="sidebar-expand"><i class="fa-solid fa-chevron-right"></i></span>
+            </a>
+            <ul class="subpages">
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-list"></i><span class="sidebar-link-text">Get All Webhooks</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-plus"></i><span class="sidebar-link-text">Create Webhook</span><span class="sidebar-method post">post</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-circle-check"></i><span class="sidebar-link-text">Verify Connection</span><span class="sidebar-method post">post</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-webhook"></i><span class="sidebar-link-text">Get Webhook</span><span class="sidebar-method get">get</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-trash"></i><span class="sidebar-link-text">Delete Webhook</span><span class="sidebar-method del">del</span></a></li>
+              <li class="subpage"><a class="sidebar-link" href="#"><i class="fa-solid fa-pen"></i><span class="sidebar-link-text">Update Webhook</span><span class="sidebar-method patch">patch</span></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ============ CONTACT ============ -->
+      <div class="sidebar-section">
+        <h2 class="sidebar-heading"><i class="fa-solid fa-headset"></i>Contact us</h2>
+        <ul class="sidebar-list">
+          <li class="sidebar-item"><a class="sidebar-link" href="#"><i class="fa-solid fa-calendar-check"></i><span class="sidebar-link-text">Request a demo</span></a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer">
+        <i class="fa-solid fa-bolt"></i>
+        Powered by <a href="#">ReadMe</a>
+      </div>
+    </aside>
+
+    <!-- ======================================================
+         CONTENT
+         ====================================================== -->
+    <article class="content">
+      <div class="copy-page-row">
+        <button class="copy-page-btn" id="copyPageBtn"><i class="fa-regular fa-copy"></i>Copy Page</button>
+      </div>
+
+      <h1 class="endpoint-title">/candidates/</h1>
+      <div class="endpoint-bar">
+        <span class="method get"><i class="fa-solid fa-download"></i>get</span>
+        <span class="endpoint-url" id="endpointUrlText">https://api.manatal.com/open/v3/candidates/</span>
+      </div>
+      <p class="endpoint-desc">Retrieve all candidates ordered alphabetically.</p>
+
+      <div class="recent-box">
+        <div class="recent-header">
+          <h4><i class="fa-solid fa-clock-rotate-left"></i>Recent Requests</h4>
+          <span class="recent-lock"><i class="fa-solid fa-lock"></i>Log in to see full request history</span>
+        </div>
+        <table class="recent-table">
+          <thead>
+            <tr>
+              <th style="width:150px">Time</th>
+              <th style="width:100px">Status</th>
+              <th>Method</th>
+              <th style="width:40px"></th>
+            </tr>
+          </thead>
+          <tbody id="recentTableBody">
+            <tr>
+              <td>43 minutes ago</td>
+              <td><span class="status-code status-4xx"><i class="fa-solid fa-circle"></i>401</span></td>
+              <td><span class="badge-try"><i class="fa-solid fa-play"></i>Try It!</span></td>
+              <td><i class="fa-regular fa-eye" style="color:var(--text-subtle)"></i></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="recent-graph">
+          <div class="sparkline">
+            <span style="height:20%"></span><span style="height:40%"></span>
+            <span style="height:60%"></span><span style="height:30%"></span>
+            <span style="height:80%"></span><span style="height:50%"></span>
+            <span style="height:90%"></span><span style="height:70%"></span>
+          </div>
+          <span><i class="fa-solid fa-chart-line"></i> <span id="requestCount">1</span> Request<span id="requestPlural">s</span> This Month</span>
+        </div>
+      </div>
+
+      <h3 class="section-heading" id="query-params">
+        <i class="fa-solid fa-sliders"></i>
+        <span>Query Params</span>
+        <a href="#query-params"><i class="fa-solid fa-link"></i></a>
+      </h3>
+
+      <form class="params" id="queryParamsForm" novalidate>
+        <div class="param">
+          <div class="param-info">
+            <div class="param-header">
+              <span class="param-name">id</span>
+              <span class="param-type"><i class="fa-solid fa-hashtag"></i>integer</span>
+            </div>
+          </div>
+          <div>
+            <input class="param-input" type="text" name="id" data-type="integer" placeholder="" />
+            <div class="param-error" data-for="id"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+          </div>
+        </div>
+
+        <div class="param">
+          <div class="param-info">
+            <div class="param-header">
+              <span class="param-name">full_name</span>
+              <span class="param-type"><i class="fa-solid fa-font"></i>string</span>
+            </div>
+          </div>
+          <div>
+            <input class="param-input" type="text" name="full_name" data-type="string" placeholder="" />
+            <div class="param-error" data-for="full_name"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+          </div>
+        </div>
+
+        <div class="param">
+          <div class="param-info">
+            <div class="param-header">
+              <span class="param-name">email</span>
+              <span class="param-type"><i class="fa-solid fa-envelope"></i>string</span>
+            </div>
+          </div>
+          <div>
+            <input class="param-input" type="text" name="email" data-type="email" placeholder="" />
+            <div class="param-error" data-for="email"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+          </div>
+        </div>
+
+        <div class="param">
+          <div class="param-info">
+            <div class="param-header">
+              <span class="param-name">phone_number</span>
+              <span class="param-type"><i class="fa-solid fa-phone"></i>string</span>
+            </div>
+          </div>
+          <div>
+            <input class="param-input" type="text" name="phone_number" data-type="string" placeholder="" />
+            <div class="param-error" data-for="phone_number"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+          </div>
+        </div>
+
+        <div class="param">
+          <div class="param-info">
+            <div class="param-header">
+              <span class="param-name">gender</span>
+              <span class="param-type"><i class="fa-solid fa-venus-mars"></i>string</span>
+            </div>
+          </div>
+          <div>
+            <input class="param-input" type="text" name="gender" data-type="string" placeholder="" />
+            <div class="param-error" data-for="gender"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+          </div>
+        </div>
+
+        <div class="param">
+          <div class="param-info">
+            <div class="param-header">
+              <span class="param-name">page</span>
+              <span class="param-type"><i class="fa-solid fa-hashtag"></i>integer</span>
+            </div>
+            <div class="param-desc">A page number within the paginated result set.</div>
+          </div>
+          <div>
+            <input class="param-input" type="text" name="page" data-type="integer" placeholder="" />
+            <div class="param-error" data-for="page"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+          </div>
+        </div>
+
+        <div class="param">
+          <div class="param-info">
+            <div class="param-header">
+              <span class="param-name">page_size</span>
+              <span class="param-type"><i class="fa-solid fa-hashtag"></i>integer</span>
+            </div>
+            <div class="param-desc">Number of results to return per page.</div>
+          </div>
+          <div>
+            <input class="param-input" type="text" name="page_size" data-type="integer" placeholder="" />
+            <div class="param-error" data-for="page_size"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+          </div>
+        </div>
+
+        <div class="param">
+          <div class="param-info">
+            <div class="param-header">
+              <span class="param-name">created_at__gte</span>
+              <span class="param-type"><i class="fa-solid fa-calendar"></i>date</span>
+            </div>
+          </div>
+          <div>
+            <input class="param-input" type="text" name="created_at__gte" data-type="date" placeholder="YYYY-MM-DD" />
+            <div class="param-error" data-for="created_at__gte"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+          </div>
+        </div>
+
+        <div class="param">
+          <div class="param-info">
+            <div class="param-header">
+              <span class="param-name">created_at__lte</span>
+              <span class="param-type"><i class="fa-solid fa-calendar"></i>date</span>
+            </div>
+          </div>
+          <div>
+            <input class="param-input" type="text" name="created_at__lte" data-type="date" placeholder="YYYY-MM-DD" />
+            <div class="param-error" data-for="created_at__lte"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+          </div>
+        </div>
+      </form>
+
+      <h3 class="section-heading" id="response-schemas">
+        <i class="fa-solid fa-reply"></i>
+        <span>Response</span>
+        <a href="#response-schemas"><i class="fa-solid fa-link"></i></a>
+      </h3>
+
+      <div class="response-accordion">
+        <div class="acc-item" data-acc>
+          <button class="acc-header" type="button">
+            <span class="status-code status-2xx"><i class="fa-solid fa-circle"></i>200</span>
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+          <div class="acc-body">
+            <pre>{
+  "count": 0,
+  "next": null,
+  "previous": null,
+  "results": []
+}</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-footer">
+        <div class="updated"><i class="fa-solid fa-clock"></i>Updated 4 months ago</div>
+        <nav class="pager">
+          <a href="#">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="pager-info">
+              <span class="pager-label">Previous</span>
+              <span class="pager-title">List Job Posts</span>
+            </span>
+          </a>
+          <a href="#" class="next">
+            <i class="fa-solid fa-arrow-right"></i>
+            <span class="pager-info">
+              <span class="pager-label">Next</span>
+              <span class="pager-title">/candidates/ (POST)</span>
+            </span>
+          </a>
+        </nav>
+      </div>
+    </article>
+
+    <!-- ======================================================
+         PLAYGROUND
+         ====================================================== -->
+    <aside class="playground">
+
+      <div class="pg-section">
+        <h4 class="pg-heading"><i class="fa-solid fa-tag"></i>Method</h4>
+        <div class="method-picker" id="methodPicker">
+          <button class="method-pick active" data-method="get">GET</button>
+          <button class="method-pick" data-method="post">POST</button>
+          <button class="method-pick" data-method="put">PUT</button>
+          <button class="method-pick" data-method="patch">PATCH</button>
+          <button class="method-pick" data-method="del">DELETE</button>
+        </div>
+      </div>
+
+      <div class="pg-section" id="bodySection" style="display:none">
+        <h4 class="pg-heading"><i class="fa-solid fa-file-code"></i>Body (JSON)</h4>
+        <textarea class="body-input" id="bodyInput" spellcheck="false"
+          placeholder='{"full_name": "Jane Doe", "email": "jane@example.com"}'></textarea>
+        <div class="body-error" id="bodyError"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+      </div>
+
+      <div class="pg-section">
+        <h4 class="pg-heading"><i class="fa-solid fa-language"></i>Language</h4>
+        <div class="lang-picker" id="langPicker">
+          <button class="lang-btn" data-lang="shell"><i class="fa-solid fa-terminal"></i>Shell</button>
+          <button class="lang-btn" data-lang="node"><i class="fa-brands fa-node-js"></i>Node</button>
+          <button class="lang-btn" data-lang="ruby"><i class="fa-solid fa-gem"></i>Ruby</button>
+          <button class="lang-btn" data-lang="php"><i class="fa-brands fa-php"></i>PHP</button>
+          <button class="lang-btn active" data-lang="python"><i class="fa-brands fa-python"></i>Python</button>
+        </div>
+      </div>
+
+      <div class="pg-section">
+        <div class="cred-header">
+          <span class="pg-heading" style="margin:0"><i class="fa-solid fa-key"></i>Credentials</span>
+          <span class="cred-tag"><i class="fa-solid fa-heading"></i>Header</span>
+        </div>
+        <div class="cred-input">
+          <input type="password" value="Token " placeholder="Authorization" id="authInput" />
+          <button class="icon-btn" id="authToggle" aria-label="Show/hide token" style="border:1px solid var(--border);border-radius:6px;width:36px;height:36px">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+        <div class="cred-error" id="credError"><i class="fa-solid fa-circle-exclamation"></i><span></span></div>
+      </div>
+
+      <div class="pg-section">
+        <h4 class="pg-heading"><i class="fa-solid fa-paper-plane"></i>Request</h4>
+        <div class="code-block">
+          <div class="code-top">
+            <span id="codeHead">python -m pip install requests</span>
+            <button class="code-copy" aria-label="Copy"><i class="fa-regular fa-copy"></i></button>
+          </div>
+          <pre class="code-body" id="codeBody"></pre>
+        </div>
+        <button class="try-btn" id="tryItBtn">
+          <i class="fa-solid fa-play"></i>Try It!
+        </button>
+      </div>
+
+      <div class="pg-section">
+        <div class="response-panel">
+          <h4><i class="fa-solid fa-reply"></i>Response</h4>
+          <div class="response-empty" id="responseEmpty">
+            Click <code>Try It!</code> to start a request and see the response here!
+          </div>
+          <div class="hidden" id="responseResult">
+            <div class="response-result-box">
+              <div class="response-meta">
+                <span id="respStatus"><i class="fa-solid fa-circle"></i>---</span>
+                <span id="respTime"><i class="fa-solid fa-clock"></i>--- ms</span>
+                <span id="respSize"><i class="fa-solid fa-database"></i>--- B</span>
+              </div>
+            </div>
+            <div class="code-block">
+              <div class="code-top">
+                <span id="respHead">application/json</span>
+                <button class="code-copy" aria-label="Copy"><i class="fa-regular fa-copy"></i></button>
+              </div>
+              <pre class="code-body" id="respBody"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- overlay must live INSIDE .app so it shares the same
+       stacking context as the sidebar -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+</div>
+
+<div class="toast-stack" id="toastStack"></div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+$(function () {
+  'use strict';
+
+  /* ============================================================
+     CONFIG
+     ============================================================ */
+  //var API_BASE  = 'https://api.manatal.com/open/v3/candidates/';
+  var API_BASE  = 'https://api.app.com/open/v3/candidates/';
+  var MONTH_KEY = 'apiRequestCount_' + new Date().toISOString().slice(0, 7);
+
+  /* ============================================================
+     TOASTS
+     ============================================================ */
+  function toast(msg, type) {
+    var icon = type === 'success' ? 'fa-circle-check'
+             : type === 'error'   ? 'fa-circle-xmark'
+             :                      'fa-circle-info';
+    var $t = $('<div class="toast ' + (type || '') + '"><i class="fa-solid ' + icon + '"></i><span></span></div>');
+    $t.find('span').text(msg);
+    $('#toastStack').append($t);
+    setTimeout(function () {
+      $t.addClass('out');
+      setTimeout(function () { $t.remove(); }, 320);
+    }, type === 'error' ? 5000 : 2600);
+  }
+
+  /* ============================================================
+     THEME
+     ============================================================ */
+  var $html = $('html');
+  function applyTheme(mode) {
+    $html.attr('data-color-mode', mode);
+    $('#themeIcon').removeClass('fa-moon fa-sun').addClass(mode === 'dark' ? 'fa-sun' : 'fa-moon');
+  }
+  applyTheme(localStorage.getItem('theme') || 'light');
+  $('#themeToggle').on('click', function () {
+    var next = $html.attr('data-color-mode') === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    localStorage.setItem('theme', next);
+    toast('Switched to ' + next + ' mode', 'success');
+  });
+
+  /* ============================================================
+     DESKTOP SIDEBAR COLLAPSE
+     ============================================================ */
+  var $app = $('#appRoot');
+  if (localStorage.getItem('sidebar-collapsed') === 'true') $app.addClass('sidebar-collapsed');
+  $('#sidebarToggle').on('click', function () {
+    $app.toggleClass('sidebar-collapsed');
+    var c = $app.hasClass('sidebar-collapsed');
+    localStorage.setItem('sidebar-collapsed', c);
+    $(this).attr('title', c ? 'Expand sidebar' : 'Collapse sidebar');
+  });
+
+  /* ============================================================
+     SIDEBAR — EXCLUSIVE ACCORDION
+     ============================================================ */
+  $('.sidebar-item[data-parent] > .sidebar-link').on('click', function (e) {
+    e.preventDefault();
+    var $item  = $(this).closest('.sidebar-item');
+    var isOpen = $item.hasClass('open');
+    if (!isOpen) $('.sidebar-item[data-parent].open').not($item).removeClass('open');
+    $item.toggleClass('open');
+  });
+
+  /* Active link — also drives playground method if data-method-link exists */
+  $(document).on('click', '.sidebar-link:not(.sidebar-link-parent)', function (e) {
+    e.preventDefault();
+    $('.sidebar-link').removeClass('active');
+    $(this).addClass('active');
+    var m = $(this).data('method-link');
+    if (m && typeof window.setMethod === 'function') window.setMethod(m);
+    if (window.matchMedia('(max-width: 860px)').matches) closeSidebar();
+  });
+
+  /* ============================================================
+     MOBILE SIDEBAR
+     ============================================================ */
+  function openSidebar()  { $('#sidebar').addClass('open');  $('#mobileOverlay').addClass('show'); $('body').css('overflow', 'hidden'); }
+  function closeSidebar() { $('#sidebar').removeClass('open'); $('#mobileOverlay').removeClass('show'); $('body').css('overflow', ''); }
+  $('#menuToggle').on('click', function () { $('#sidebar').hasClass('open') ? closeSidebar() : openSidebar(); });
+  $('#mobileOverlay').on('click', closeSidebar);
+
+  /* ============================================================
+     SIDEBAR FILTER
+     ============================================================ */
+  var $filterInput = $('#filterInput');
+  var $filterWrap  = $('#filterWrap');
+  var $filterClear = $('#filterClear');
+  var $sidebar     = $('#sidebar');
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function escapeHtml(s) { return s.replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  function highlight(el, q) {
+    var $el = $(el);
+    var raw = $el.data('original') || $el.text();
+    if (!$el.data('original')) $el.data('original', raw);
+    if (!q) { $el.text(raw); return; }
+    var re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig');
+    $el.html(escapeHtml(raw).replace(re, '<mark class="hl">$1</mark>'));
+  }
+
+  function runFilter() {
+    var q = $filterInput.val().trim();
+    var lq = q.toLowerCase();
+    $filterWrap.toggleClass('has-value', !!q);
+    $filterClear.toggleClass('show', !!q);
+
+    if (!q) {
+      $('.sidebar-item, .sidebar-link').show();
+      $('.sidebar-link-text').each(function () { highlight(this, ''); });
+      $('#filterCount').text('0');
+      $sidebar.removeClass('filtering-empty');
+      return;
+    }
+
+    var count = 0;
+    $('.sidebar-item, .sidebar-link').hide();
+    $('.sidebar-link-text').each(function () { highlight(this, ''); });
+
+    $('.sidebar-link').each(function () {
+      var $l = $(this);
+      if ($l.text().toLowerCase().indexOf(lq) !== -1) {
+        count++;
+        $l.show();
+        $l.closest('.sidebar-item').show();
+        $l.parents('.sidebar-item').show();
+        $l.find('.sidebar-link-text').each(function () { highlight(this, q); });
+      }
+    });
+
+    $('.sidebar-item[data-parent]').each(function () {
+      if ($(this).find('.sidebar-link:visible').length) $(this).addClass('open');
+    });
+
+    $('#filterCount').text(count);
+    $sidebar.toggleClass('filtering-empty', count === 0);
+  }
+
+  $filterInput.on('input', runFilter);
+  $filterClear.on('click', function () { $filterInput.val('').focus(); runFilter(); });
+  $('#filterClearAll').on('click', function () { $filterInput.val('').focus(); runFilter(); });
+
+  /* ============================================================
+     RESPONSE ACCORDION
+     ============================================================ */
+  $('[data-acc] .acc-header').on('click', function () {
+    $(this).closest('[data-acc]').toggleClass('open');
+  });
+
+  /* ============================================================
+     STATE
+     ============================================================ */
+  var currentMethod = 'get';
+  var currentLang   = 'python';
+  var METHOD_HAS_BODY = { post: true, put: true, patch: true, get: false, del: false };
+
+  /* ============================================================
+     HELPERS
+     ============================================================ */
+  function getAuthToken() {
+    var v = ($('#authInput').val() || '').trim();
+    if (!v || v === 'Token') return 'Token ••••';
+    return v;
+  }
+  function getAuthTokenRaw() {
+    var v = ($('#authInput').val() || '').trim();
+    return (!v || v === 'Token') ? '' : v;
+  }
+  function getQueryParams() {
+    var out = [];
+    $('#queryParamsForm .param-input').each(function () {
+      var n = $(this).attr('name');
+      var v = ($(this).val() || '').trim();
+      if (n && v) out.push([n, v]);
+    });
+    return out;
+  }
+  function buildUrl() {
+    if (currentMethod !== 'get' && currentMethod !== 'del') return API_BASE;
+    var params = getQueryParams();
+    if (!params.length) return API_BASE;
+    var qs = params.map(function (p) {
+      return encodeURIComponent(p[0]) + '=' + encodeURIComponent(p[1]);
+    }).join('&');
+    return API_BASE + '?' + qs;
+  }
+  function getBodyPretty() {
+    if (!METHOD_HAS_BODY[currentMethod]) return '';
+    var raw = ($('#bodyInput').val() || '').trim();
+    if (!raw) return '';
+    try { return JSON.stringify(JSON.parse(raw), null, 2); }
+    catch (e) { return raw; }
+  }
+
+  /* ============================================================
+     BODY AUTO-SYNC FROM PARAMS
+     ============================================================ */
+ /* ============================================================
+   BODY AUTO-SYNC FROM PARAMS — auto-generated map
+   ============================================================ */
+/*
+ * PARAM_TO_BODY is built at runtime by scanning every input inside
+ * #queryParamsForm. Pagination controls and Django-style lookup
+ * suffixes (__gte, __lte, __gt, __lt, __in, __contains, …) are
+ * excluded because they are never valid in a request body.
+ *
+ * To add a new body-eligible field later, just add another
+ * <input class="param-input" name="…"> to the form — no JS edits.
+ */
+var PARAM_TO_BODY = (function buildParamMap() {
+  // Fields that never belong in the request body
+  var EXCLUDED_NAMES = /^(id|page|page_size)$/i;
+  // Suffixes that indicate a query-only lookup
+  var EXCLUDED_SUFFIX = /__(gte|lte|gt|lt|in|contains|icontains|startswith|istartswith|endswith|iendswith|isnull|range|year|month|day|week_day|hour|minute|second|regex|iregex)$/i;
+
+  var map = {};
+  $('#queryParamsForm .param-input[name]').each(function () {
+    var n = $(this).attr('name');
+    if (!n) return;
+    //if (EXCLUDED_NAMES.test(n)) return;
+    if (EXCLUDED_SUFFIX.test(n)) return;
+    map[n] = n;   // param name === body field name
+  });
+  return map;
+})();
+
+/* Optional: log the auto-generated map so you can verify it */
+console.debug('PARAM_TO_BODY auto-generated:', PARAM_TO_BODY);
+
+function seedBodyFromParams() {
+  var seed = {};
+  Object.keys(PARAM_TO_BODY).forEach(function (paramName) {
+    var $input = $('#queryParamsForm .param-input[name="' + paramName + '"]');
+    if (!$input.length) return;
+    var v = ($input.val() || '').trim();
+    if (v) seed[PARAM_TO_BODY[paramName]] = v;
+  });
+  return seed;
+}
+
+function buildDefaultBody(method) {
+  var base = {
+    post:  { },
+    put:   { },
+    patch: { }
+  }[method] || {};
+  return JSON.stringify(Object.assign({}, base, seedBodyFromParams()), null, 2);
+}
+
+  /* ============================================================
+     VALIDATION
+     ============================================================ */
+  function validateParam($input) {
+    var val  = ($input.val() || '').trim();
+    var type = $input.data('type') || 'string';
+    if (!val) return null;
+    if (type === 'integer') {
+      if (!/^-?\d+$/.test(val)) return 'Must be a whole number';
+      if (parseInt(val, 10) < 1 && $input.attr('name') !== 'id') return 'Must be 1 or greater';
+    }
+    if (type === 'date') {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(val)) return 'Use YYYY-MM-DD format';
+      if (isNaN(new Date(val).getTime())) return 'Invalid date';
+    }
+    if (type === 'email') {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) return 'Invalid email address';
+    }
+    if (type === 'string' && val.length > 255) return 'Max 255 characters';
+    return null;
+  }
+
+  function setParamError($input, msg) {
+    var name = $input.attr('name');
+    var $err = $('.param-error[data-for="' + name + '"]');
+    if (msg) {
+      $input.addClass('invalid').removeClass('valid');
+      $err.find('span').text(msg);
+      $err.addClass('show');
+    } else {
+      $input.removeClass('invalid');
+      if (($input.val() || '').trim()) $input.addClass('valid');
+      else $input.removeClass('valid');
+      $err.removeClass('show');
+    }
+  }
+
+  /* Live validation + body sync */
+  $('#queryParamsForm').on('input', '.param-input', function () {
+    var $i = $(this);
+    setParamError($i, validateParam($i));
+
+    // Live-sync the body when method requires one and user hasn't manually edited
+    if (METHOD_HAS_BODY[currentMethod] && !$('#bodyInput').data('touched-' + currentMethod)) {
+      $('#bodyInput').val(buildDefaultBody(currentMethod));
+      $('#bodyInput').removeClass('invalid');
+      $('#bodyError').removeClass('show');
+    }
+
+    scheduleSnippetUpdate();
+  });
+  $('#queryParamsForm').on('blur', '.param-input', function () {
+    var $i = $(this);
+    setParamError($i, validateParam($i));
+  });
+
+  function validateForm() {
+    var errors = [];
+
+    // Auth
+    var token = ($('#authInput').val() || '').trim();
+    if (!token || token === 'Token' || token === 'Token ') {
+      $('#authInput').addClass('invalid');
+      $('#credError').addClass('show').find('span').text('Authorization token is required');
+      errors.push('Authorization token is required');
+    } else {
+      $('#authInput').removeClass('invalid');
+      $('#credError').removeClass('show');
+    }
+
+    // Params
+    $('#queryParamsForm .param-input').each(function () {
+      var $i = $(this);
+      var err = validateParam($i);
+      setParamError($i, err);
+      if (err) errors.push($i.attr('name') + ': ' + err);
+    });
+
+    // Body
+    if (METHOD_HAS_BODY[currentMethod]) {
+      var raw = ($('#bodyInput').val() || '').trim();
+      if (!raw) {
+        $('#bodyInput').addClass('invalid');
+        $('#bodyError').addClass('show').find('span').text('Request body is required for ' + currentMethod.toUpperCase());
+        errors.push('Request body is required');
+      } else {
+        try {
+          JSON.parse(raw);
+          $('#bodyInput').removeClass('invalid');
+          $('#bodyError').removeClass('show');
+        } catch (e) {
+          $('#bodyInput').addClass('invalid');
+          $('#bodyError').addClass('show').find('span').text('Invalid JSON: ' + e.message);
+          errors.push('Invalid JSON body');
+        }
+      }
+    } else {
+      $('#bodyInput').removeClass('invalid');
+      $('#bodyError').removeClass('show');
+    }
+
+    return errors;
+  }
+
+  /* Live clear for auth + body */
+  $('#authInput').on('input', function () {
+    var v = ($(this).val() || '').trim();
+    if (v && v !== 'Token ' && v !== 'Token') {
+      $(this).removeClass('invalid');
+      $('#credError').removeClass('show');
+    }
+    scheduleSnippetUpdate();
+  });
+
+  $('#bodyInput').on('input', function () {
+    $(this).data('touched-' + currentMethod, true);
+    if (METHOD_HAS_BODY[currentMethod]) {
+      var raw = ($(this).val() || '').trim();
+      if (raw) {
+        try { JSON.parse(raw); $(this).removeClass('invalid'); $('#bodyError').removeClass('show'); }
+        catch (e) { $(this).addClass('invalid'); $('#bodyError').addClass('show').find('span').text('Invalid JSON: ' + e.message); }
+      } else {
+        $(this).removeClass('invalid'); $('#bodyError').removeClass('show');
+      }
+    }
+    scheduleSnippetUpdate();
+  });
+
+  /* ============================================================
+     SNIPPET BUILDERS
+     ============================================================ */
+  var SNIPPETS = {
+    python: function (url, tok, body) {
+      var hasBody = body.length > 0;
+      var out  = '<span class="kw">import</span> <span class="var">requests</span>\n';
+      if (hasBody) out += '<span class="kw">import</span> <span class="var">json</span>\n';
+      out += '\n<span class="var">url</span> = <span class="str">"' + esc(url) + '"</span>\n\n';
+      if (hasBody) out += '<span class="var">payload</span> = <span class="var">json</span>.<span class="fn">loads</span>(<span class="str">r"""' + esc(body) + '"""</span>)\n\n';
+      out += '<span class="var">headers</span> = {\n';
+      out += '    <span class="str">"accept"</span>: <span class="str">"application/json"</span>';
+      if (hasBody) out += ',\n    <span class="str">"content-type"</span>: <span class="str">"application/json"</span>';
+      out += ',\n    <span class="str">"Authorization"</span>: <span class="str">"' + esc(tok) + '"</span>\n}\n\n';
+      var call = '<span class="var">requests</span>.<span class="fn">' + currentMethod + '</span>(<span class="var">url</span>, <span class="var">headers</span>=<span class="var">headers</span>';
+      if (hasBody) call += ', <span class="var">json</span>=<span class="var">payload</span>';
+      call += ')';
+      out += '<span class="var">response</span> = ' + call + '\n\n';
+      out += '<span class="fn">print</span>(<span class="var">response</span>.<span class="fn">text</span>)';
+      return out;
+    },
+    shell: function (url, tok, body) {
+      var hasBody = body.length > 0;
+      var method = currentMethod === 'del' ? 'DELETE' : currentMethod.toUpperCase();
+      var out = '<span class="var">curl</span> --request ' + method + ' \\\n';
+      out += '  --url <span class="str">"' + esc(url) + '"</span> \\\n';
+      out += '  --header <span class="str">"accept: application/json"</span> \\\n';
+      if (hasBody) out += '  --header <span class="str">"content-type: application/json"</span> \\\n';
+      out += '  --header <span class="str">"Authorization: ' + esc(tok) + '"</span>';
+      if (hasBody) {
+        var single = body.replace(/'/g, "'\\''");
+        out += ' \\\n  --data <span class="str">\'' + esc(single) + '\'</span>';
+      }
+      return out;
+    },
+    node: function (url, tok, body) {
+      var hasBody = body.length > 0;
+      var method = currentMethod === 'del' ? 'DELETE' : currentMethod.toUpperCase();
+      var out = '<span class="kw">const</span> <span class="var">fetch</span> = <span class="fn">require</span>(<span class="str">"node-fetch"</span>);\n\n';
+      out += '<span class="kw">const</span> <span class="var">options</span> = {\n';
+      out += '  <span class="var">method</span>: <span class="str">"' + method + '"</span>,\n';
+      out += '  <span class="var">headers</span>: {\n';
+      out += '    <span class="str">"accept"</span>: <span class="str">"application/json"</span>';
+      if (hasBody) out += ',\n    <span class="str">"content-type"</span>: <span class="str">"application/json"</span>';
+      out += ',\n    <span class="str">"Authorization"</span>: <span class="str">"' + esc(tok) + '"</span>\n  }';
+      if (hasBody) out += ',\n  <span class="var">body</span>: <span class="var">JSON</span>.<span class="fn">stringify</span>(' + esc(body) + ')';
+      out += '\n};\n\n';
+      out += '<span class="fn">fetch</span>(<span class="str">"' + esc(url) + '"</span>, <span class="var">options</span>)\n';
+      out += '  .<span class="fn">then</span>(<span class="var">res</span> =&gt; <span class="var">res</span>.<span class="fn">json</span>())\n';
+      out += '  .<span class="fn">then</span>(<span class="var">json</span> =&gt; <span class="fn">console</span>.<span class="fn">log</span>(<span class="var">json</span>))\n';
+      out += '  .<span class="fn">catch</span>(<span class="var">err</span> =&gt; <span class="fn">console</span>.<span class="fn">error</span>(<span class="var">err</span>));';
+      return out;
+    },
+    ruby: function (url, tok, body) {
+      var hasBody = body.length > 0;
+      var klass = { get:'Get', post:'Post', put:'Put', patch:'Patch', del:'Delete' }[currentMethod];
+      var out = '<span class="kw">require</span> <span class="str">"uri"</span>\n';
+      if (hasBody) out += '<span class="kw">require</span> <span class="str">"json"</span>\n';
+      out += '<span class="kw">require</span> <span class="str">"net/http"</span>\n\n';
+      out += '<span class="var">url</span> = <span class="var">URI</span>(<span class="str">"' + esc(url) + '"</span>)\n\n';
+      out += '<span class="var">http</span> = <span class="var">Net</span>::<span class="var">HTTP</span>.<span class="fn">new</span>(<span class="var">url</span>.<span class="var">host</span>, <span class="var">url</span>.<span class="var">port</span>)\n';
+      out += '<span class="var">request</span> = <span class="var">Net</span>::<span class="var">HTTP</span>::<span class="var">' + klass + '</span>.<span class="fn">new</span>(<span class="var">url</span>)\n';
+      out += '<span class="var">request</span>[<span class="str">"accept"</span>] = <span class="str">"application/json"</span>\n';
+      if (hasBody) out += '<span class="var">request</span>[<span class="str">"content-type"</span>] = <span class="str">"application/json"</span>\n';
+      out += '<span class="var">request</span>[<span class="str">"Authorization"</span>] = <span class="str">"' + esc(tok) + '"</span>\n';
+      if (hasBody) out += '<span class="var">request</span>.<span class="var">body</span> = <span class="str">r"""' + esc(body) + '"""</span>\n';
+      out += '\n<span class="var">response</span> = <span class="var">http</span>.<span class="fn">request</span>(<span class="var">request</span>)\n';
+      out += '<span class="fn">puts</span> <span class="var">response</span>.<span class="fn">read_body</span>';
+      return out;
+    },
+    php: function (url, tok, body) {
+      var hasBody = body.length > 0;
+      var method = currentMethod === 'del' ? 'DELETE' : currentMethod.toUpperCase();
+      var out = '<span class="var">$curl</span> = <span class="fn">curl_init</span>();\n\n';
+      out += '<span class="fn">curl_setopt_array</span>(<span class="var">$curl</span>, [\n';
+      out += '  <span class="var">CURLOPT_URL</span> =&gt; <span class="str">"' + esc(url) + '"</span>,\n';
+      out += '  <span class="var">CURLOPT_RETURNTRANSFER</span> =&gt; <span class="kw">true</span>,\n';
+      out += '  <span class="var">CURLOPT_CUSTOMREQUEST</span> =&gt; <span class="str">"' + method + '"</span>,\n';
+      if (hasBody) {
+        var bodyEsc = esc(body).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        out += '  <span class="var">CURLOPT_POSTFIELDS</span> =&gt; <span class="str">\'' + bodyEsc + '\'</span>,\n';
+      }
+      out += '  <span class="var">CURLOPT_HTTPHEADER</span> =&gt; [\n';
+      out += '    <span class="str">"accept: application/json"</span>';
+      if (hasBody) out += ',\n    <span class="str">"content-type: application/json"</span>';
+      out += ',\n    <span class="str">"Authorization: ' + esc(tok) + '"</span>\n  ]\n]);\n\n';
+      out += '<span class="var">$response</span> = <span class="fn">curl_exec</span>(<span class="var">$curl</span>);\n';
+      out += '<span class="fn">curl_close</span>(<span class="var">$curl</span>);\n\n';
+      out += '<span class="fn">echo</span> <span class="var">$response</span>;';
+      return out;
+    }
+  };
+
+  var LANG_HEADERS = {
+    python: 'python -m pip install requests',
+    shell:  'bash',
+    node:   'npm install node-fetch',
+    ruby:   'ruby (net/http built-in)',
+    php:    'php (curl extension)'
+  };
+
+  function renderSnippet() {
+    var builder = SNIPPETS[currentLang];
+    if (!builder) return;
+    $('#codeBody').html(builder(buildUrl(), getAuthToken(), getBodyPretty()));
+    $('#codeHead').text(LANG_HEADERS[currentLang] || currentLang);
+    $('#endpointUrlText').text(buildUrl());
+  }
+
+  var snippetTimer;
+  function scheduleSnippetUpdate() {
+    clearTimeout(snippetTimer);
+    snippetTimer = setTimeout(renderSnippet, 150);
+  }
+
+  /* ============================================================
+     METHOD PICKER
+     ============================================================ */
+  function setMethod(m) {
+    if (['get','post','put','patch','del'].indexOf(m) === -1) return;
+    currentMethod = m;
+
+    $('#methodPicker .method-pick').removeClass('active');
+    $('#methodPicker .method-pick[data-method="' + m + '"]').addClass('active');
+
+    // Endpoint badge
+    var $badge = $('.endpoint-bar .method');
+    $badge.removeClass('get post put patch del').addClass(m);
+    var iconMap = { get:'fa-download', post:'fa-plus', put:'fa-pen', patch:'fa-eraser', del:'fa-trash' };
+    $badge.find('i').removeClass().addClass('fa-solid ' + iconMap[m]);
+    $badge.contents().filter(function(){ return this.nodeType === 3; }).remove();
+    $badge.append(m === 'del' ? 'delete' : m);
+
+    // Body section
+    if (METHOD_HAS_BODY[m]) {
+      $('#bodySection').slideDown(200);
+      if (!$('#bodyInput').data('touched-' + m)) {
+        $('#bodyInput').val(buildDefaultBody(m));
+      } else {
+        var stash = $('#bodyInput').data('stash-' + m);
+        if (typeof stash === 'string') $('#bodyInput').val(stash);
+      }
+      $('#bodyInput').removeClass('invalid');
+      $('#bodyError').removeClass('show');
+    } else {
+      // stash current body before hiding
+      var last = $('#bodyInput').data('lastMethod');
+      if (METHOD_HAS_BODY[last]) {
+        $('#bodyInput').data('stash-' + last, $('#bodyInput').val());
+      }
+      $('#bodySection').slideUp(200);
+    }
+    $('#bodyInput').data('lastMethod', m);
+
+    renderSnippet();
+  }
+  window.setMethod = setMethod;
+
+  $('#methodPicker').on('click', '.method-pick', function () {
+    setMethod($(this).data('method'));
+  });
+
+  /* ============================================================
+     SIDEBAR METHOD BADGE → DRIVES PLAYGROUND
+     ============================================================ */
+  $(document).on('click', '.sidebar-link .sidebar-method', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var m = $(this).hasClass('del') ? 'del' : $(this).text().trim().toLowerCase();
+    if (m === 'delete') m = 'del';
+    setMethod(m);
+  });
+
+  /* ============================================================
+     LANGUAGE PICKER
+     ============================================================ */
+  $('#langPicker').on('mousemove', '.lang-btn', function (e) {
+    var r = this.getBoundingClientRect();
+    this.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+    this.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+  });
+
+  $('#langPicker').on('click', '.lang-btn', function () {
+    $('#langPicker .lang-btn').removeClass('active');
+    $(this).addClass('active');
+    currentLang = $(this).data('lang');
+    renderSnippet();
+    $('#codeBody').css('animation', 'none');
+    void $('#codeBody')[0].offsetWidth;
+    $('#codeBody').css('animation', 'fadeIn .3s var(--ease-out)');
+  });
+
+  /* ============================================================
+     AUTH TOGGLE
+     ============================================================ */
+  $('#authToggle').on('click', function () {
+    var $i  = $('#authInput');
+    var $ic = $(this).find('i');
+    if ($i.attr('type') === 'password') {
+      $i.attr('type', 'text');
+      $ic.removeClass('fa-eye').addClass('fa-eye-slash');
+    } else {
+      $i.attr('type', 'password');
+      $ic.removeClass('fa-eye-slash').addClass('fa-eye');
+    }
+  });
+
+  /* ============================================================
+     TRY IT — REAL API SUBMISSION
+     ============================================================ */
+  function updateRequestCount() {
+    var n = parseInt(localStorage.getItem(MONTH_KEY) || '0', 10) + 1;
+    localStorage.setItem(MONTH_KEY, n);
+    $('#requestCount').text(n);
+    $('#requestPlural').text(n === 1 ? '' : 's');
+  }
+  function initRequestCount() {
+    var n = parseInt(localStorage.getItem(MONTH_KEY) || '1', 10);
+    $('#requestCount').text(n);
+    $('#requestPlural').text(n === 1 ? '' : 's');
+  }
+  initRequestCount();
+
+  function addRecentRow(status, method, timeText) {
+    var statusClass = status >= 200 && status < 300 ? 'status-2xx' : 'status-4xx';
+    var label = method === 'del' ? 'DELETE' : method.toUpperCase();
+    var $row = $('<tr>'
+      + '<td>' + timeText + '</td>'
+      + '<td><span class="status-code ' + statusClass + '"><i class="fa-solid fa-circle"></i>' + (status || '—') + '</span></td>'
+      + '<td><span class="badge-try"><i class="fa-solid fa-play"></i>' + label + '</span></td>'
+      + '<td><i class="fa-regular fa-eye" style="color:var(--text-subtle)"></i></td>'
+      + '</tr>');
+    $('#recentTableBody').prepend($row);
+    if ($('#recentTableBody tr').length > 5) $('#recentTableBody tr').last().remove();
+  }
+
+  function humanBytes(b) {
+    if (b < 1024) return b + ' B';
+    if (b < 1024 * 1024) return (b / 1024).toFixed(1) + ' KB';
+    return (b / (1024 * 1024)).toFixed(2) + ' MB';
+  }
+
+  function showResponse(status, statusText, body, ms, bytes) {
+    $('#responseEmpty').addClass('hidden');
+    $('#responseResult').removeClass('hidden');
+    var cls = status >= 200 && status < 300 ? 'status-ok'
+            : status >= 500 ? 'status-err'
+            : status >= 400 ? 'status-warn' : '';
+    $('#respStatus').html('<i class="fa-solid fa-circle ' + cls + '"></i>' + status + ' ' + (statusText || ''));
+    $('#respTime').html('<i class="fa-solid fa-clock"></i>' + ms + ' ms');
+    $('#respSize').html('<i class="fa-solid fa-database"></i>' + humanBytes(bytes));
+    var pretty = body;
+    try { pretty = JSON.stringify(JSON.parse(body), null, 2); } catch (e) {}
+    $('#respBody').text(pretty);
+    $('#respHead').text('application/json');
+  }
+
+  function showErrorResponse(title, details) {
+    $('#responseEmpty').addClass('hidden');
+    $('#responseResult').removeClass('hidden');
+    $('#respStatus').html('<i class="fa-solid fa-circle status-err"></i>' + title);
+    $('#respTime').html('<i class="fa-solid fa-clock"></i>—');
+    $('#respSize').html('<i class="fa-solid fa-database"></i>—');
+    $('#respBody').text(details || '');
+    $('#respHead').text('error');
+  }
+
+  $('#tryItBtn').on('click', function () {
+    var $btn = $(this);
+    if ($btn.prop('disabled')) return;
+
+    // Clear stale errors
+    $('#credError').removeClass('show');
+    $('#authInput').removeClass('invalid');
+    $('#bodyError').removeClass('show');
+    $('#bodyInput').removeClass('invalid');
+    $('.param-error').removeClass('show');
+    $('.param-input').removeClass('invalid valid');
+
+    // Validate
+    var errors = validateForm();
+    if (errors.length) {
+      toast('Fix ' + errors.length + ' validation error' + (errors.length > 1 ? 's' : ''), 'error');
+      var $first = $('.param-input.invalid, #authInput.invalid, #bodyInput.invalid').first();
+      if ($first.length) { $first[0].scrollIntoView({ behavior:'smooth', block:'center' }); $first.focus(); }
+      return;
+    }
+
+    // Build request
+    var method = currentMethod.toUpperCase();
+    var url    = buildUrl();
+    var token  = getAuthTokenRaw();
+    var headers = { 'accept': 'application/json', 'Authorization': 'Token ' + token };
+    var fetchOpts = { method: method, headers: headers, mode: 'cors' };
+    if (METHOD_HAS_BODY[currentMethod]) {
+      headers['content-type'] = 'application/json';
+      fetchOpts.body = $('#bodyInput').val();
+    }
+
+    // UI: loading
+    $btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin"></i>Sending…');
+    var t0 = performance.now();
+
+    // REAL fetch to Manatal API
+    fetch(url, fetchOpts)
+      .then(function (res) {
+        return res.text().then(function (text) { return { res: res, text: text }; });
+      })
+      .then(function (out) {
+        var ms    = Math.round(performance.now() - t0);
+        var bytes = new Blob([out.text]).size;
+        showResponse(out.res.status, out.res.statusText, out.text, ms, bytes);
+        addRecentRow(out.res.status, currentMethod, 'just now');
+        updateRequestCount();
+        if (out.res.ok) toast('Request succeeded · ' + out.res.status, 'success');
+        else            toast('Server responded · ' + out.res.status, 'error');
+      })
+      .catch(function (err) {
+        var ms = Math.round(performance.now() - t0);
+        var hint = '';
+        if (err instanceof TypeError || /Failed to fetch|NetworkError|Load failed/i.test(err.message)) {
+          hint = 'The browser blocked the request. This usually means:\n' +
+                 '  • The Authorization token is invalid or missing\n' +
+                 '  • CORS is not enabled for browser-origin requests\n' +
+                 '  • You are offline\n\n' +
+                 'Manatal\'s API is designed for server-to-server calls. In production, ' +
+                 'proxy this request through your own backend to avoid exposing your token ' +
+                 'and to bypass browser CORS restrictions.\n\n' +
+                 'Underlying error: ' + err.message;
+        } else {
+          hint = err.message || String(err);
+        }
+        showErrorResponse('Network error', hint);
+        addRecentRow(0, currentMethod, 'just now');
+        toast('Request failed — see Response panel', 'error');
+      })
+      .finally(function () {
+        $btn.prop('disabled', false).html('<i class="fa-solid fa-play"></i>Try It!');
+      });
+  });
+
+  /* ============================================================
+     COPY PAGE + CODE
+     ============================================================ */
+  $('#copyPageBtn').on('click', function () {
+    var $b = $(this), orig = $b.html();
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href).then(function () {
+        $b.html('<i class="fa-solid fa-check"></i>Copied!');
+        toast('Page URL copied', 'success');
+        setTimeout(function () { $b.html(orig); }, 1500);
+      });
+    }
+  });
+
+  $(document).on('click', '.code-copy', function () {
+    var $b = $(this);
+    var text = $b.closest('.code-block').find('.code-body').text();
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(function () {
+        $b.html('<i class="fa-solid fa-check" style="color:#8ce99a"></i>');
+        toast('Copied to clipboard', 'success');
+        setTimeout(function () { $b.html('<i class="fa-regular fa-copy"></i>'); }, 1200);
+      });
+    }
+  });
+
+  /* ============================================================
+     KEYBOARD SHORTCUTS
+     ============================================================ */
+  $(document).on('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault(); $filterInput.focus();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+      e.preventDefault(); $filterInput.focus();
+    }
+    if (e.key === 'Escape' && document.activeElement === $filterInput[0]) {
+      $filterInput.val(''); runFilter(); $filterInput.blur();
+    }
+  });
+
+  /* ============================================================
+     HEADER SHADOW
+     ============================================================ */
+  var $topHeader = $('#topHeader');
+  $(window).on('scroll', function () {
+    $topHeader.toggleClass('scrolled', $(window).scrollTop() > 8);
+  });
+
+  /* ============================================================
+     SCROLL REVEAL
+     ============================================================ */
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.style.opacity = '1';
+          en.target.style.transform = 'translateY(0)';
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: .05, rootMargin: '0px 0px -30px 0px' });
+
+    $('.param, .content-footer, .response-accordion').each(function (i) {
+      this.style.opacity = '0';
+      this.style.transform = 'translateY(8px)';
+      this.style.transition = 'opacity .4s var(--ease-out) ' + (i * .015) + 's, transform .4s var(--ease-out) ' + (i * .015) + 's';
+      io.observe(this);
+    });
+  }
+
+  /* ============================================================
+     INIT
+     ============================================================ */
+  setMethod('get');
+  renderSnippet();
+
+});
+</script>
+</body>
+</html>
